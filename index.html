@@ -3,273 +3,599 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SD Happy Hours | Find Happy Hours in San Diego</title>
+  <title>SD Happy Hours</title>
+  <meta name="description" content="Find happy hours happening right now in San Diego. Real-time deals from Little Italy to Pacific Beach.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* ===== DESIGN TOKENS ===== */
+    :root {
+      /* Palette: drawn from San Diego sunsets and ocean */
+      --pacific: #0F2942;
+      --pacific-light: #1A3A5C;
+      --sunset: #E07B4C;
+      --sunset-glow: #F4A574;
+      --twilight: #6366F1;
+      --sand: #FAF7F2;
+      --sand-dark: #EDE8E0;
+      --seafoam: #10B981;
+      --seafoam-soft: rgba(16, 185, 129, 0.15);
+      --ink: #1E293B;
+      --ink-light: #64748B;
+
+      /* Typography */
+      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+
+      /* Spacing */
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 40px;
+      --space-2xl: 64px;
+
+      /* Radii */
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+    }
+
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      font-family: var(--font-body);
+      background: var(--pacific);
+      color: var(--sand);
       min-height: 100vh;
-      color: #fff;
+      line-height: 1.5;
     }
 
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Focus states for accessibility */
+    :focus-visible {
+      outline: 2px solid var(--sunset);
+      outline-offset: 2px;
+    }
+
+    /* ===== LAYOUT ===== */
     .container {
-      max-width: 1200px;
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 0 var(--space-lg);
     }
 
-    header {
+    /* ===== HERO ===== */
+    .hero {
+      padding: var(--space-2xl) 0;
       text-align: center;
-      padding: 40px 20px;
+      position: relative;
+      overflow: hidden;
     }
 
-    h1 {
-      font-size: 3rem;
-      background: linear-gradient(90deg, #f59e0b, #ef4444);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 10px;
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 400px;
+      background: radial-gradient(ellipse at 50% 0%, var(--pacific-light) 0%, transparent 70%);
+      pointer-events: none;
     }
 
-    .tagline {
-      color: #94a3b8;
-      font-size: 1.2rem;
+    .brand {
+      position: relative;
+      z-index: 1;
     }
 
+    .brand h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--sand);
+      margin-bottom: var(--space-sm);
+    }
+
+    .brand h1 span {
+      color: var(--sunset);
+    }
+
+    .brand .tagline {
+      font-size: 1.125rem;
+      color: var(--ink-light);
+      font-weight: 400;
+    }
+
+    /* ===== GOLDEN HOUR INDICATOR ===== */
+    .golden-hour {
+      margin: var(--space-xl) auto;
+      max-width: 480px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .golden-hour-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-sm);
+      font-size: 0.875rem;
+    }
+
+    .golden-hour-label .time-now {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--sunset);
+    }
+
+    .golden-hour-label .status {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .golden-hour-label .status .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--seafoam);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .golden-hour-label .status.inactive .dot {
+      background: var(--ink-light);
+      animation: none;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.1); }
+    }
+
+    .golden-hour-track {
+      height: 6px;
+      background: var(--pacific-light);
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .golden-hour-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--twilight), var(--sunset), var(--sunset-glow));
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+
+    .golden-hour-markers {
+      display: flex;
+      justify-content: space-between;
+      margin-top: var(--space-xs);
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      color: var(--ink-light);
+    }
+
+    /* ===== FILTERS ===== */
     .filters {
       display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
+      gap: var(--space-md);
       justify-content: center;
-      margin: 30px 0;
+      flex-wrap: wrap;
+      margin-bottom: var(--space-xl);
+      position: relative;
+      z-index: 1;
     }
 
     .filter-group {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: var(--space-xs);
     }
 
     .filter-group label {
-      font-size: 0.85rem;
-      color: #94a3b8;
+      font-size: 0.75rem;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.05em;
+      color: var(--ink-light);
     }
 
-    select {
-      padding: 12px 20px;
-      border-radius: 10px;
-      border: 2px solid #334155;
-      background: #1e293b;
-      color: #fff;
-      font-size: 1rem;
+    .filter-group select {
+      appearance: none;
+      background: var(--pacific-light);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--sand);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      padding: var(--space-sm) var(--space-xl) var(--space-sm) var(--space-md);
+      border-radius: var(--radius-sm);
       cursor: pointer;
-      min-width: 180px;
+      min-width: 160px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748B' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      transition: border-color 0.15s, background-color 0.15s;
     }
 
-    select:focus {
+    .filter-group select:hover {
+      background-color: rgba(255,255,255,0.08);
+    }
+
+    .filter-group select:focus {
       outline: none;
-      border-color: #f59e0b;
+      border-color: var(--sunset);
     }
 
-    .status-bar {
-      text-align: center;
-      padding: 15px;
-      background: rgba(245, 158, 11, 0.1);
-      border-radius: 10px;
-      margin-bottom: 20px;
+    /* ===== RESULTS BAR ===== */
+    .results-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-md) var(--space-lg);
+      background: rgba(255,255,255,0.03);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-lg);
+      flex-wrap: wrap;
+      gap: var(--space-md);
     }
 
-    .status-bar .count {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #f59e0b;
+    .results-count {
+      font-size: 0.9375rem;
     }
 
-    .happening-now {
-      display: inline-block;
-      background: #22c55e;
-      color: #000;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: bold;
-      margin-left: 10px;
-      animation: pulse 2s infinite;
+    .results-count strong {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      color: var(--sunset);
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      background: var(--seafoam-soft);
+      color: var(--seafoam);
+      padding: var(--space-xs) var(--space-md);
+      border-radius: 100px;
+      font-size: 0.875rem;
+      font-weight: 600;
     }
 
+    .live-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--seafoam);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* ===== CARD GRID ===== */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: var(--space-lg);
+      margin-bottom: var(--space-2xl);
     }
 
+    /* ===== CARD ===== */
     .card {
-      background: linear-gradient(145deg, #1e293b, #0f172a);
-      border-radius: 16px;
-      padding: 25px;
-      border: 1px solid #334155;
-      transition: transform 0.2s, box-shadow 0.2s;
+      background: var(--sand);
+      color: var(--ink);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      position: relative;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      /* Cocktail napkin texture feel */
+      box-shadow:
+        0 1px 2px rgba(0,0,0,0.05),
+        0 4px 12px rgba(0,0,0,0.08);
     }
 
     .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      transform: translateY(-4px);
+      box-shadow:
+        0 4px 8px rgba(0,0,0,0.08),
+        0 12px 32px rgba(0,0,0,0.12);
     }
 
-    .card.active-now {
-      border-color: #22c55e;
-      box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+    .card.is-live {
+      box-shadow:
+        0 0 0 2px var(--seafoam),
+        0 4px 12px rgba(16, 185, 129, 0.2);
     }
 
-    .card-header {
+    .card.is-live::before {
+      content: '';
+      position: absolute;
+      top: var(--space-md);
+      right: var(--space-md);
+      width: 10px;
+      height: 10px;
+      background: var(--seafoam);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .card-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 15px;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
     }
 
     .card h2 {
-      font-size: 1.4rem;
-      color: #fff;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--ink);
     }
 
     .card .neighborhood {
-      background: #334155;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      color: #94a3b8;
+      flex-shrink: 0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--ink-light);
+      background: var(--sand-dark);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius-sm);
     }
 
     .card .vibe {
-      color: #f59e0b;
-      font-size: 0.9rem;
-      margin-bottom: 10px;
+      font-size: 0.875rem;
+      color: var(--ink-light);
+      margin-bottom: var(--space-md);
     }
 
-    .card .time {
+    /* Time display - the most important info */
+    .card .time-block {
+      background: var(--ink);
+      color: var(--sand);
+      padding: var(--space-md);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-md);
       display: flex;
       align-items: center;
-      gap: 8px;
-      color: #94a3b8;
-      margin-bottom: 15px;
+      justify-content: space-between;
     }
 
-    .card .time .clock {
-      font-size: 1.2rem;
+    .card .time-display {
+      font-family: var(--font-mono);
+      font-size: 1.125rem;
+      letter-spacing: -0.02em;
     }
 
-    .card .days {
-      display: flex;
-      gap: 5px;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-    }
-
-    .card .day {
-      background: #0f172a;
-      padding: 4px 8px;
-      border-radius: 4px;
+    .card .live-tag {
       font-size: 0.75rem;
-      color: #64748b;
-    }
-
-    .card .day.today {
-      background: #f59e0b;
-      color: #000;
-      font-weight: bold;
-    }
-
-    .card .deals {
-      margin-top: 15px;
-    }
-
-    .card .deals h3 {
-      font-size: 0.85rem;
-      color: #64748b;
-      margin-bottom: 8px;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.05em;
+      color: var(--seafoam);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    /* Week bar */
+    .card .week-bar {
+      display: flex;
+      gap: 2px;
+      margin-bottom: var(--space-md);
+    }
+
+    .card .week-bar .day {
+      flex: 1;
+      text-align: center;
+      padding: var(--space-xs) 0;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      background: var(--sand-dark);
+      border-radius: 2px;
+    }
+
+    .card .week-bar .day:first-child {
+      border-radius: var(--radius-sm) 2px 2px var(--radius-sm);
+    }
+
+    .card .week-bar .day:last-child {
+      border-radius: 2px var(--radius-sm) var(--radius-sm) 2px;
+    }
+
+    .card .week-bar .day.active {
+      background: var(--sunset);
+      color: white;
+    }
+
+    .card .week-bar .day.today {
+      box-shadow: inset 0 -2px 0 var(--twilight);
+    }
+
+    /* Deals */
+    .card .deals {
+      margin-bottom: var(--space-md);
+    }
+
+    .card .deals-label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ink-light);
+      margin-bottom: var(--space-sm);
+    }
+
+    .card .deal-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
     }
 
     .card .deal {
-      background: rgba(34, 197, 94, 0.1);
-      color: #22c55e;
-      padding: 6px 12px;
-      border-radius: 6px;
-      display: inline-block;
-      margin: 3px;
-      font-size: 0.9rem;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      background: rgba(16, 185, 129, 0.1);
+      color: #059669;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius-sm);
     }
 
+    /* Address */
     .card .address {
-      margin-top: 15px;
-      padding-top: 15px;
-      border-top: 1px solid #334155;
-      color: #64748b;
-      font-size: 0.9rem;
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--sand-dark);
     }
 
     .card .address a {
-      color: #60a5fa;
+      font-size: 0.875rem;
+      color: var(--ink-light);
       text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      transition: color 0.15s;
     }
 
     .card .address a:hover {
-      text-decoration: underline;
+      color: var(--ink);
     }
 
+    .card .address a svg {
+      flex-shrink: 0;
+    }
+
+    /* ===== EMPTY STATE ===== */
     .empty-state {
       text-align: center;
-      padding: 60px 20px;
-      color: #64748b;
+      padding: var(--space-2xl) var(--space-lg);
+      color: var(--ink-light);
     }
 
     .empty-state h2 {
+      font-family: var(--font-display);
       font-size: 1.5rem;
-      margin-bottom: 10px;
+      color: var(--sand);
+      margin-bottom: var(--space-sm);
     }
 
+    .empty-state p {
+      font-size: 1rem;
+    }
+
+    /* ===== FOOTER ===== */
     footer {
       text-align: center;
-      padding: 40px 20px;
-      color: #64748b;
-      font-size: 0.9rem;
+      padding: var(--space-xl) var(--space-lg);
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    footer p {
+      font-size: 0.875rem;
+      color: var(--ink-light);
     }
 
     footer a {
-      color: #f59e0b;
+      color: var(--sunset);
       text-decoration: none;
+      font-weight: 500;
     }
 
-    @media (max-width: 600px) {
-      h1 { font-size: 2rem; }
-      .grid { grid-template-columns: 1fr; }
-      .filters { flex-direction: column; align-items: center; }
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 640px) {
+      .hero {
+        padding: var(--space-xl) 0;
+      }
+
+      .filters {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .filter-group select {
+        width: 100%;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .results-bar {
+        flex-direction: column;
+        text-align: center;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <header>
-      <h1>SD Happy Hours</h1>
-      <p class="tagline">Find the best happy hour deals in San Diego</p>
+    <!-- Hero -->
+    <header class="hero">
+      <div class="brand">
+        <h1>SD <span>Happy Hours</span></h1>
+        <p class="tagline">Find where to drink right now in San Diego</p>
+      </div>
+
+      <!-- Golden Hour Indicator -->
+      <div class="golden-hour">
+        <div class="golden-hour-label">
+          <span class="time-now" id="current-time">4:32 PM</span>
+          <span class="status" id="golden-status">
+            <span class="dot"></span>
+            <span id="golden-text">Golden hour</span>
+          </span>
+        </div>
+        <div class="golden-hour-track">
+          <div class="golden-hour-fill" id="golden-fill" style="width: 45%"></div>
+        </div>
+        <div class="golden-hour-markers">
+          <span>2 PM</span>
+          <span>5 PM</span>
+          <span>8 PM</span>
+        </div>
+      </div>
     </header>
 
+    <!-- Filters -->
     <div class="filters">
       <div class="filter-group">
-        <label>Day</label>
+        <label for="day-filter">Day</label>
         <select id="day-filter">
-          <option value="">All Days</option>
+          <option value="">All days</option>
           <option value="Monday">Monday</option>
           <option value="Tuesday">Tuesday</option>
           <option value="Wednesday">Wednesday</option>
@@ -281,45 +607,111 @@
       </div>
 
       <div class="filter-group">
-        <label>Neighborhood</label>
+        <label for="neighborhood-filter">Neighborhood</label>
         <select id="neighborhood-filter">
-          <option value="">All Neighborhoods</option>
+          <option value="">All neighborhoods</option>
         </select>
       </div>
 
       <div class="filter-group">
-        <label>Status</label>
+        <label for="status-filter">Status</label>
         <select id="status-filter">
           <option value="">All</option>
-          <option value="now">Happening Now</option>
+          <option value="now">Live now</option>
         </select>
       </div>
     </div>
 
-    <div class="status-bar">
-      <span class="count" id="result-count">0</span> happy hours found
-      <span class="happening-now" id="live-count"></span>
+    <!-- Results Bar -->
+    <div class="results-bar">
+      <span class="results-count">
+        <strong id="result-count">0</strong> happy hours
+      </span>
+      <span class="live-badge" id="live-badge" style="display: none;">
+        <span class="dot"></span>
+        <span id="live-count">0</span> live now
+      </span>
     </div>
 
+    <!-- Grid -->
     <div class="grid" id="grid"></div>
 
+    <!-- Empty State -->
     <div class="empty-state" id="empty-state" style="display: none;">
       <h2>No happy hours found</h2>
-      <p>Try adjusting your filters</p>
+      <p>Try adjusting your filters or check back later</p>
     </div>
 
+    <!-- Footer -->
     <footer>
-      <p>Built by Shane & John | <a href="mailto:hello@sdhappyhours.com">Submit a happy hour</a></p>
+      <p>Built by Shane & John in San Diego | <a href="mailto:hello@sdhappyhours.com">Submit a spot</a></p>
     </footer>
   </div>
 
   <script>
     let happyHours = [];
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const today = days[new Date().getDay()];
+    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const dayAbbrev = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const today = dayNames[new Date().getDay()];
+    const todayIndex = new Date().getDay();
 
     // Set today as default filter
     document.getElementById('day-filter').value = today;
+
+    // Update current time display
+    function updateTimeDisplay() {
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      const displayHours = hours % 12 || 12;
+      const timeStr = `${displayHours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+
+      document.getElementById('current-time').textContent = timeStr;
+
+      // Golden hour calculation (2 PM to 8 PM = 360 minutes)
+      const currentMinutes = hours * 60 + minutes;
+      const startMinutes = 14 * 60; // 2 PM
+      const endMinutes = 20 * 60;   // 8 PM
+      const range = endMinutes - startMinutes;
+
+      let progress = 0;
+      let statusText = 'Before happy hour';
+      let isActive = false;
+
+      if (currentMinutes < startMinutes) {
+        progress = 0;
+        statusText = 'Happy hour starts soon';
+      } else if (currentMinutes > endMinutes) {
+        progress = 100;
+        statusText = 'Happy hour ended';
+      } else {
+        progress = ((currentMinutes - startMinutes) / range) * 100;
+        isActive = true;
+
+        // Peak golden hour is 4-6 PM
+        if (hours >= 16 && hours < 18) {
+          statusText = 'Golden hour';
+        } else if (hours >= 14 && hours < 16) {
+          statusText = 'Early bird';
+        } else {
+          statusText = 'Last call';
+        }
+      }
+
+      document.getElementById('golden-fill').style.width = `${progress}%`;
+      document.getElementById('golden-text').textContent = statusText;
+
+      const statusEl = document.getElementById('golden-status');
+      if (isActive) {
+        statusEl.classList.remove('inactive');
+      } else {
+        statusEl.classList.add('inactive');
+      }
+    }
+
+    updateTimeDisplay();
+    setInterval(updateTimeDisplay, 30000); // Update every 30 seconds
 
     async function loadData() {
       const res = await fetch('/data/happy-hours.json');
@@ -391,13 +783,14 @@
       const grid = document.getElementById('grid');
       const emptyState = document.getElementById('empty-state');
       const resultCount = document.getElementById('result-count');
-      const liveCount = document.getElementById('live-count');
+      const liveBadge = document.getElementById('live-badge');
+      const liveCountEl = document.getElementById('live-count');
 
       resultCount.textContent = filtered.length;
 
       const liveNow = filtered.filter(h => isHappeningNow(h)).length;
-      liveCount.textContent = liveNow > 0 ? `${liveNow} happening now` : '';
-      liveCount.style.display = liveNow > 0 ? 'inline-block' : 'none';
+      liveCountEl.textContent = liveNow;
+      liveBadge.style.display = liveNow > 0 ? 'inline-flex' : 'none';
 
       if (filtered.length === 0) {
         grid.style.display = 'none';
@@ -410,33 +803,49 @@
 
       grid.innerHTML = filtered.map(h => {
         const isLive = isHappeningNow(h);
-        const dayDisplay = dayFilter || today;
+
+        // Build week bar
+        const weekBar = dayNames.map((day, i) => {
+          const isActive = h.days.includes(day);
+          const isToday = i === todayIndex;
+          let classes = 'day';
+          if (isActive) classes += ' active';
+          if (isToday) classes += ' today';
+          return `<span class="${classes}">${dayAbbrev[i]}</span>`;
+        }).join('');
 
         return `
-          <div class="card ${isLive ? 'active-now' : ''}">
-            <div class="card-header">
+          <article class="card ${isLive ? 'is-live' : ''}">
+            <div class="card-top">
               <h2>${h.name}</h2>
               <span class="neighborhood">${h.neighborhood}</span>
             </div>
-            <div class="vibe">${h.vibe}</div>
-            <div class="time">
-              <span class="clock">${isLive ? '🟢' : '🕐'}</span>
-              <span>${formatTime(h.startTime)} - ${formatTime(h.endTime)}</span>
-              ${isLive ? '<strong style="color: #22c55e;">LIVE NOW</strong>' : ''}
+            <p class="vibe">${h.vibe}</p>
+
+            <div class="time-block">
+              <span class="time-display">${formatTime(h.startTime)} – ${formatTime(h.endTime)}</span>
+              ${isLive ? '<span class="live-tag"><span class="dot" style="width:6px;height:6px;background:var(--seafoam);border-radius:50%;"></span> Live</span>' : ''}
             </div>
-            <div class="days">
-              ${h.days.map(d => `<span class="day ${d === today ? 'today' : ''}">${d.slice(0,3)}</span>`).join('')}
-            </div>
+
+            <div class="week-bar">${weekBar}</div>
+
             <div class="deals">
-              <h3>Deals</h3>
-              ${h.deals.map(d => `<span class="deal">${d}</span>`).join('')}
+              <div class="deals-label">Deals</div>
+              <div class="deal-list">
+                ${h.deals.map(d => `<span class="deal">${d}</span>`).join('')}
+              </div>
             </div>
+
             <div class="address">
-              <a href="https://maps.google.com/?q=${encodeURIComponent(h.address + ', San Diego, CA')}" target="_blank">
+              <a href="https://maps.google.com/?q=${encodeURIComponent(h.address + ', San Diego, CA')}" target="_blank" rel="noopener">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
                 ${h.address}
               </a>
             </div>
-          </div>
+          </article>
         `;
       }).join('');
     }
