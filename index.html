@@ -65,44 +65,142 @@
     /* ===== HERO ===== */
     .hero {
       position: relative;
-      min-height: 70vh;
+      min-height: 75vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 60px 24px;
+      padding: 80px 24px 100px;
       overflow: hidden;
+      background: linear-gradient(to bottom, #1A0A2E 0%, #2D1B4E 30%, #8B4B6B 55%, #E8956B 75%, #F4C05C 90%, #FFE4A0 100%);
     }
 
+    /* Stars at top */
     .hero::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(135deg,
-          var(--sunset-start) 0%,
-          var(--sunset-mid) 25%,
-          var(--sunset-end) 50%,
-          var(--ocean) 75%,
-          var(--ocean-deep) 100%
-        );
-      z-index: 0;
-    }
-
-    .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-      opacity: 0.08;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 40%;
+      background-image:
+        radial-gradient(2px 2px at 20% 15%, white 100%, transparent),
+        radial-gradient(2px 2px at 40% 8%, white 100%, transparent),
+        radial-gradient(1px 1px at 60% 20%, white 100%, transparent),
+        radial-gradient(2px 2px at 80% 12%, white 100%, transparent),
+        radial-gradient(1px 1px at 10% 25%, white 100%, transparent),
+        radial-gradient(1px 1px at 70% 5%, white 100%, transparent),
+        radial-gradient(2px 2px at 90% 22%, white 100%, transparent),
+        radial-gradient(1px 1px at 30% 18%, white 100%, transparent),
+        radial-gradient(1px 1px at 50% 10%, white 100%, transparent);
+      opacity: 0.6;
       z-index: 1;
       pointer-events: none;
     }
 
+    /* Sun glow */
+    .sun {
+      position: absolute;
+      bottom: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, #FFF9E6 0%, #FFD54F 30%, #FF9800 60%, transparent 70%);
+      border-radius: 50%;
+      z-index: 1;
+      filter: blur(2px);
+    }
+
+    .sun::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255,200,100,0.4) 0%, transparent 60%);
+      border-radius: 50%;
+    }
+
+    /* Ocean */
+    .ocean {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 18%;
+      background: linear-gradient(to bottom, #1A5276 0%, #154360 50%, #0E2F44 100%);
+      z-index: 2;
+    }
+
+    .ocean::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+    }
+
+    /* Sun reflection on water */
+    .ocean::after {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 80%;
+      background: linear-gradient(to bottom,
+        rgba(255, 200, 100, 0.5) 0%,
+        rgba(255, 180, 80, 0.3) 30%,
+        rgba(255, 160, 60, 0.15) 60%,
+        transparent 100%
+      );
+      filter: blur(8px);
+      border-radius: 50% 50% 0 0;
+    }
+
+    /* Palm trees - left */
+    .palm-left {
+      position: absolute;
+      bottom: 12%;
+      left: -20px;
+      z-index: 3;
+      opacity: 0.9;
+    }
+
+    .palm-right {
+      position: absolute;
+      bottom: 12%;
+      right: -30px;
+      z-index: 3;
+      opacity: 0.9;
+      transform: scaleX(-1);
+    }
+
+    /* Cocktail glass decoration */
+    .cocktail-icon {
+      position: absolute;
+      top: 20px;
+      right: 10%;
+      z-index: 4;
+      opacity: 0.85;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50% { transform: translateY(-10px) rotate(5deg); }
+    }
+
     .hero-content {
       position: relative;
-      z-index: 2;
+      z-index: 5;
       max-width: 900px;
     }
 
@@ -110,24 +208,24 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(255,255,255,0.2);
+      background: rgba(0,0,0,0.25);
       backdrop-filter: blur(10px);
-      padding: 8px 20px;
+      padding: 10px 22px;
       border-radius: 100px;
       font-size: 0.875rem;
       font-weight: 600;
       color: white;
       margin-bottom: 24px;
-      border: 1px solid rgba(255,255,255,0.3);
+      border: 1px solid rgba(255,255,255,0.2);
     }
 
     .hero-badge .pulse {
       width: 8px;
       height: 8px;
-      background: var(--palm);
+      background: #4ADE80;
       border-radius: 50%;
       animation: pulse 2s ease-in-out infinite;
-      box-shadow: 0 0 12px var(--palm);
+      box-shadow: 0 0 12px #4ADE80;
     }
 
     @keyframes pulse {
@@ -137,30 +235,30 @@
 
     .hero h1 {
       font-family: var(--font-display);
-      font-size: clamp(3rem, 12vw, 7rem);
+      font-size: clamp(3rem, 12vw, 6.5rem);
       font-weight: 700;
       color: white;
       line-height: 0.95;
-      margin-bottom: 24px;
-      text-shadow: 0 4px 30px rgba(0,0,0,0.15);
+      margin-bottom: 20px;
+      text-shadow: 0 4px 40px rgba(0,0,0,0.3);
     }
 
     .hero h1 span {
       display: block;
       font-family: var(--font-body);
-      font-size: clamp(1rem, 3vw, 1.5rem);
-      font-weight: 500;
+      font-size: clamp(0.9rem, 2.5vw, 1.25rem);
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.25em;
       opacity: 0.9;
       margin-bottom: 8px;
+      color: #FFE4A0;
     }
 
     .hero-tagline {
-      font-size: clamp(1.125rem, 2.5vw, 1.5rem);
-      color: white;
-      opacity: 0.95;
-      margin-bottom: 40px;
+      font-size: clamp(1rem, 2.5vw, 1.375rem);
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 36px;
       font-weight: 400;
     }
 
@@ -170,15 +268,15 @@
       align-items: center;
       gap: 16px;
       background: white;
-      padding: 16px 32px;
+      padding: 18px 36px;
       border-radius: 100px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
     }
 
     .live-counter .number {
       font-size: 2.5rem;
       font-weight: 800;
-      background: linear-gradient(135deg, var(--sunset-start), var(--coral));
+      background: linear-gradient(135deg, var(--sunset-start), #E85D4C);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       line-height: 1;
@@ -203,12 +301,12 @@
     /* Scroll indicator */
     .scroll-hint {
       position: absolute;
-      bottom: 32px;
+      bottom: 24%;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 2;
+      z-index: 10;
       color: white;
-      opacity: 0.8;
+      opacity: 0.9;
       animation: bounce 2s ease-in-out infinite;
     }
 
@@ -623,6 +721,66 @@
 
   <!-- HERO -->
   <section class="hero">
+    <!-- Sun -->
+    <div class="sun"></div>
+
+    <!-- Ocean -->
+    <div class="ocean"></div>
+
+    <!-- Palm tree left -->
+    <div class="palm-left">
+      <svg width="200" height="320" viewBox="0 0 200 320" fill="none">
+        <!-- Trunk -->
+        <path d="M95 320 L90 180 Q88 160 92 140 L98 140 Q102 160 100 180 L105 320 Z" fill="#2D1810"/>
+        <path d="M92 320 L88 200 Q86 180 90 160" stroke="#1A0F0A" stroke-width="2" fill="none"/>
+        <!-- Fronds -->
+        <path d="M94 145 Q60 120 20 130 Q50 110 94 140" fill="#1B3D2F"/>
+        <path d="M96 140 Q70 100 40 80 Q70 85 96 135" fill="#234D3A"/>
+        <path d="M98 138 Q90 80 70 40 Q100 70 100 135" fill="#1B3D2F"/>
+        <path d="M100 138 Q120 70 150 30 Q115 75 102 135" fill="#234D3A"/>
+        <path d="M102 140 Q140 90 175 70 Q135 100 104 138" fill="#1B3D2F"/>
+        <path d="M104 145 Q150 120 190 125 Q145 115 104 142" fill="#234D3A"/>
+        <!-- Coconuts -->
+        <circle cx="92" cy="148" r="6" fill="#3D2817"/>
+        <circle cx="102" cy="146" r="5" fill="#4A3020"/>
+      </svg>
+    </div>
+
+    <!-- Palm tree right -->
+    <div class="palm-right">
+      <svg width="180" height="280" viewBox="0 0 180 280" fill="none">
+        <!-- Trunk -->
+        <path d="M85 280 L82 160 Q80 145 84 130 L90 130 Q94 145 92 160 L95 280 Z" fill="#2D1810"/>
+        <!-- Fronds -->
+        <path d="M86 135 Q55 115 20 120 Q48 100 86 130" fill="#1B3D2F"/>
+        <path d="M88 130 Q65 95 40 75 Q68 82 88 125" fill="#234D3A"/>
+        <path d="M90 128 Q85 75 70 40 Q95 68 92 125" fill="#1B3D2F"/>
+        <path d="M92 128 Q110 70 140 35 Q105 72 94 125" fill="#234D3A"/>
+        <path d="M94 130 Q130 95 160 80 Q125 100 96 128" fill="#1B3D2F"/>
+        <path d="M96 135 Q140 118 175 120 Q132 110 96 132" fill="#234D3A"/>
+      </svg>
+    </div>
+
+    <!-- Cocktail glass decoration -->
+    <div class="cocktail-icon">
+      <svg width="70" height="90" viewBox="0 0 70 90" fill="none">
+        <!-- Glass -->
+        <path d="M10 10 L35 50 L60 10 Z" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+        <!-- Stem -->
+        <line x1="35" y1="50" x2="35" y2="75" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+        <!-- Base -->
+        <ellipse cx="35" cy="78" rx="15" ry="4" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+        <!-- Liquid -->
+        <path d="M18 20 L35 42 L52 20 Z" fill="#FF6B6B" opacity="0.8"/>
+        <!-- Lime -->
+        <circle cx="28" cy="18" r="6" fill="#4ADE80" opacity="0.9"/>
+        <path d="M25 18 Q28 15 31 18" stroke="#22C55E" stroke-width="1.5" fill="none"/>
+        <!-- Umbrella -->
+        <path d="M42 8 Q50 5 55 15 L42 12 Z" fill="#FFD23F"/>
+        <line x1="42" y1="8" x2="42" y2="25" stroke="#8B4513" stroke-width="1.5"/>
+      </svg>
+    </div>
+
     <div class="hero-content">
       <div class="hero-badge">
         <span class="pulse"></span>
@@ -630,7 +788,7 @@
       </div>
 
       <h1>
-        <span>Where San Diego</span>
+        <span>Where San Diego Drinks</span>
         Happy Hour
       </h1>
 
