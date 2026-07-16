@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit a Happy Hour | SD Happy Hours</title>
+  <meta name="description" content="Submit a San Diego restaurant happy hour for review by SD Happy Hours.">
+  <style>
+    :root {
+      --sunset-start: #FF6B35;
+      --sunset-end: #FFD23F;
+      --ocean: #0891B2;
+      --night: #0F172A;
+      --night-soft: #1E293B;
+      --sand: #FFFBF5;
+      --sand-warm: #FEF3E2;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--sand);
+      color: var(--night);
+      font-family: Outfit, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1A0A2E, #8B4B6B 60%, #F4C05C);
+      color: white;
+      padding: 42px 24px;
+    }
+
+    .header-inner,
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    nav {
+      margin-bottom: 34px;
+    }
+
+    nav a {
+      color: white;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 7vw, 4.5rem);
+      line-height: 0.98;
+      margin: 0 0 14px;
+    }
+
+    .intro {
+      color: rgba(255,255,255,0.88);
+      font-size: 1.1rem;
+      line-height: 1.6;
+      max-width: 660px;
+    }
+
+    main {
+      padding: 34px 24px 70px;
+    }
+
+    .submit-form {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: var(--radius);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      padding: 22px;
+      box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-field label {
+      color: var(--night-soft);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 2px solid var(--sand-warm);
+      border-radius: 12px;
+      color: var(--night);
+      font: inherit;
+      padding: 12px 14px;
+      background: white;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: var(--sunset-start);
+      box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.12);
+      outline: none;
+    }
+
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+    }
+
+    .checkbox-grid label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--sand-warm);
+      border-radius: 12px;
+      color: var(--night);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 10px 12px;
+      text-transform: none;
+    }
+
+    .submit-actions {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      grid-column: 1 / -1;
+    }
+
+    button {
+      border: 0;
+      background: var(--night);
+      color: white;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 800;
+      padding: 13px 22px;
+      border-radius: 100px;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+    }
+
+    .form-status {
+      color: var(--night-soft);
+      font-weight: 700;
+    }
+
+    .form-status.error {
+      color: #B91C1C;
+    }
+
+    footer {
+      color: var(--night-soft);
+      font-size: 0.88rem;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 760px) {
+      .submit-form {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <nav><a href="/">Back to happy hours</a></nav>
+      <h1>Submit a Happy Hour</h1>
+      <p class="intro">Restaurants can submit happy hour details for admin review. Approved listings appear after the team verifies the basics.</p>
+    </div>
+  </header>
+
+  <main>
+    <form class="submit-form" id="submit-form">
+      <div class="form-field">
+        <label for="contact-name">Contact name</label>
+        <input id="contact-name" name="contactName" required>
+      </div>
+
+      <div class="form-field">
+        <label for="contact-email">Contact email</label>
+        <input id="contact-email" name="contactEmail" type="email" required>
+      </div>
+
+      <div class="form-field">
+        <label for="submit-name">Restaurant</label>
+        <input id="submit-name" name="name" required>
+      </div>
+
+      <div class="form-field">
+        <label for="submit-neighborhood">Neighborhood</label>
+        <input id="submit-neighborhood" name="neighborhood" placeholder="Little Italy" required>
+      </div>
+
+      <div class="form-field full">
+        <label for="submit-address">Address</label>
+        <input id="submit-address" name="address" placeholder="123 Main St" required>
+      </div>
+
+      <div class="form-field">
+        <label for="submit-website">Website</label>
+        <input id="submit-website" name="website" type="url" placeholder="https://..." required>
+      </div>
+
+      <div class="form-field">
+        <label for="submit-source">Source URL</label>
+        <input id="submit-source" name="sourceUrl" type="url" placeholder="https://...">
+      </div>
+
+      <div class="form-field">
+        <label for="submit-start">Start time</label>
+        <input id="submit-start" name="startTime" type="time" required>
+      </div>
+
+      <div class="form-field">
+        <label for="submit-end">End time</label>
+        <input id="submit-end" name="endTime" type="time" required>
+      </div>
+
+      <div class="form-field full">
+        <label>Days</label>
+        <div class="checkbox-grid">
+          <label><input type="checkbox" name="days" value="Monday"> Monday</label>
+          <label><input type="checkbox" name="days" value="Tuesday"> Tuesday</label>
+          <label><input type="checkbox" name="days" value="Wednesday"> Wednesday</label>
+          <label><input type="checkbox" name="days" value="Thursday"> Thursday</label>
+          <label><input type="checkbox" name="days" value="Friday"> Friday</label>
+          <label><input type="checkbox" name="days" value="Saturday"> Saturday</label>
+          <label><input type="checkbox" name="days" value="Sunday"> Sunday</label>
+        </div>
+      </div>
+
+      <div class="form-field full">
+        <label for="submit-deals">Deals</label>
+        <textarea id="submit-deals" name="deals" placeholder="$8 margaritas&#10;$5 tacos" required></textarea>
+      </div>
+
+      <div class="form-field">
+        <label for="submit-vibe">Vibe</label>
+        <input id="submit-vibe" name="vibe" placeholder="Rooftop, wine bar, patio..." required>
+      </div>
+
+      <div class="form-field">
+        <label for="submit-notes">Notes</label>
+        <input id="submit-notes" name="notes" placeholder="Anything admins should know">
+      </div>
+
+      <div class="form-field full">
+        <label>Deal types</label>
+        <div class="checkbox-grid">
+          <label><input type="checkbox" name="dealTypes" value="beer"> Beer</label>
+          <label><input type="checkbox" name="dealTypes" value="cocktails"> Cocktails</label>
+          <label><input type="checkbox" name="dealTypes" value="wine"> Wine</label>
+          <label><input type="checkbox" name="dealTypes" value="food"> Food</label>
+          <label><input type="checkbox" name="dealTypes" value="oysters"> Oysters</label>
+          <label><input type="checkbox" name="dealTypes" value="entertainment"> Entertainment</label>
+        </div>
+      </div>
+
+      <div class="form-field full">
+        <label>Features</label>
+        <div class="checkbox-grid">
+          <label><input type="checkbox" name="features" value="patio"> Patio</label>
+          <label><input type="checkbox" name="features" value="dog friendly"> Dog-friendly</label>
+          <label><input type="checkbox" name="features" value="date night"> Date night</label>
+          <label><input type="checkbox" name="features" value="group friendly"> Group-friendly</label>
+          <label><input type="checkbox" name="features" value="waterfront"> Waterfront</label>
+          <label><input type="checkbox" name="features" value="rooftop"> Rooftop</label>
+          <label><input type="checkbox" name="features" value="casual"> Casual</label>
+          <label><input type="checkbox" name="features" value="upscale"> Upscale</label>
+        </div>
+      </div>
+
+      <div class="submit-actions">
+        <button type="submit">Submit for review</button>
+        <span class="form-status" id="submit-status" aria-live="polite"></span>
+      </div>
+    </form>
+
+    <footer>Submissions enter the admin review queue before they appear on SD Happy Hours.</footer>
+  </main>
+
+  <script>
+    function getCheckedValues(form, name) {
+      return [...form.querySelectorAll(`input[name="${name}"]:checked`)].map(input => input.value);
+    }
+
+    function getSubmissionPayload(form) {
+      const formData = new FormData(form);
+      const website = String(formData.get('website') || '').trim();
+      const sourceUrl = String(formData.get('sourceUrl') || '').trim();
+      return {
+        contactName: formData.get('contactName'),
+        contactEmail: formData.get('contactEmail'),
+        name: formData.get('name'),
+        neighborhood: formData.get('neighborhood'),
+        address: formData.get('address'),
+        website,
+        sourceUrl: sourceUrl || website,
+        startTime: formData.get('startTime'),
+        endTime: formData.get('endTime'),
+        days: getCheckedValues(form, 'days'),
+        deals: String(formData.get('deals') || '').split('\n').map(item => item.trim()).filter(Boolean),
+        vibe: formData.get('vibe'),
+        notes: formData.get('notes'),
+        dealTypes: getCheckedValues(form, 'dealTypes'),
+        features: getCheckedValues(form, 'features')
+      };
+    }
+
+    document.getElementById('submit-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const status = document.getElementById('submit-status');
+      const submitButton = form.querySelector('button[type="submit"]');
+
+      status.classList.remove('error');
+      status.textContent = 'Submitting...';
+      submitButton.disabled = true;
+
+      try {
+        const res = await fetch('/api/submissions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(getSubmissionPayload(form))
+        });
+        const json = await res.json();
+        if (!res.ok) {
+          throw new Error((json.errors || ['Submission failed.']).join(' '));
+        }
+        form.reset();
+        status.textContent = 'Submitted. The team will review it before it goes live.';
+      } catch (err) {
+        status.classList.add('error');
+        status.textContent = err.message;
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

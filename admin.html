@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SD Happy Hours Admin</title>
+  <style>
+    :root {
+      --ink: #0F172A;
+      --muted: #64748B;
+      --line: #E2E8F0;
+      --paper: #FFFFFF;
+      --wash: #F8FAFC;
+      --accent: #FF6B35;
+      --good: #047857;
+      --bad: #B91C1C;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--wash);
+      color: var(--ink);
+    }
+
+    header {
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    .bar, main {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .bar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 1.35rem;
+      margin: 0 0 4px;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .home-link {
+      color: var(--accent);
+      display: inline-block;
+      font-weight: 800;
+      margin-top: 8px;
+      text-decoration: none;
+    }
+
+    .home-link:hover {
+      text-decoration: underline;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    textarea, button {
+      font: inherit;
+    }
+
+    textarea {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: white;
+      color: var(--ink);
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: var(--ink);
+      color: white;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    button.secondary {
+      background: #E2E8F0;
+      color: var(--ink);
+    }
+
+    button.good {
+      background: var(--good);
+    }
+
+    button.bad {
+      background: var(--bad);
+    }
+
+    .admin-user {
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    main {
+      padding: 24px 20px 60px;
+    }
+
+    .status {
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .submission {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+
+    .submission-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .submission h2 {
+      font-size: 1.1rem;
+      margin: 0 0 4px;
+    }
+
+    .pill {
+      align-self: flex-start;
+      border-radius: 100px;
+      background: #FEF3C7;
+      color: #92400E;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 5px 9px;
+      text-transform: uppercase;
+    }
+
+    .pill.approved {
+      background: #DCFCE7;
+      color: #166534;
+    }
+
+    .pill.denied {
+      background: #FEE2E2;
+      color: #991B1B;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 8px;
+      margin-bottom: 14px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 280px;
+      resize: vertical;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .error {
+      color: var(--bad);
+      font-weight: 700;
+      margin-top: 10px;
+      white-space: pre-wrap;
+    }
+
+    @media (max-width: 760px) {
+      .bar, .submission-head, .admin-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="bar">
+      <div>
+        <h1>Submission Review</h1>
+        <p>Approve, deny, or edit restaurant-submitted happy hour listings.</p>
+        <a class="home-link" href="/">Back to site</a>
+      </div>
+      <div class="admin-actions">
+        <span class="admin-user" id="admin-user"></span>
+        <button class="secondary" id="refresh">Refresh</button>
+        <button class="secondary" id="logout">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="status" id="status">Checking login...</div>
+    <div id="submissions"></div>
+  </main>
+
+  <script>
+    const statusEl = document.getElementById('status');
+    const submissionsEl = document.getElementById('submissions');
+    const adminUserEl = document.getElementById('admin-user');
+
+    function escapeHTML(value) {
+      return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char]));
+    }
+
+    function setStatus(message) {
+      statusEl.textContent = message;
+    }
+
+    async function api(path, options = {}) {
+      const res = await fetch(path, {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          ...(options.headers || {})
+        }
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        throw new Error((json.errors || ['Request failed.']).join('\n'));
+      }
+      return json;
+    }
+
+    function renderSubmissions(submissions) {
+      if (!submissions.length) {
+        submissionsEl.innerHTML = '';
+        setStatus('No submissions yet.');
+        return;
+      }
+
+      setStatus(`${submissions.length} submission${submissions.length === 1 ? '' : 's'}`);
+      submissionsEl.innerHTML = submissions.map(item => `
+        <article class="submission" data-id="${escapeHTML(item.id)}">
+          <div class="submission-head">
+            <div>
+              <h2>${escapeHTML(item.listing.name)}</h2>
+              <p>${escapeHTML(item.listing.neighborhood)} · submitted ${new Date(item.createdAt).toLocaleString()}</p>
+            </div>
+            <span class="pill ${escapeHTML(item.status)}">${escapeHTML(item.status)}</span>
+          </div>
+          <div class="meta">
+            <div><strong>Contact:</strong> ${escapeHTML(item.contact.contactName)}</div>
+            <div><strong>Email:</strong> ${escapeHTML(item.contact.contactEmail)}</div>
+            <div><strong>Website:</strong> ${escapeHTML(item.listing.website)}</div>
+            <div><strong>Source:</strong> ${escapeHTML(item.listing.sourceUrl)}</div>
+          </div>
+          <textarea spellcheck="false">${escapeHTML(JSON.stringify(item.listing, null, 2))}</textarea>
+          <div class="actions">
+            <button class="secondary" data-action="edit">Save Edit</button>
+            <button class="good" data-action="approve">Approve</button>
+            <button class="bad" data-action="deny">Deny</button>
+          </div>
+          <div class="error" aria-live="polite"></div>
+        </article>
+      `).join('');
+    }
+
+    async function loadSubmissions() {
+      setStatus('Loading submissions...');
+      try {
+        renderSubmissions(await api('/api/admin/submissions'));
+      } catch (err) {
+        window.location.href = '/login.html';
+      }
+    }
+
+    async function requireLogin() {
+      const res = await fetch('/api/admin/me');
+      const session = await res.json();
+      if (!session.authenticated) {
+        window.location.href = '/login.html';
+        return;
+      }
+      adminUserEl.textContent = `Logged in as ${session.username}`;
+      await loadSubmissions();
+    }
+
+    async function logout() {
+      await fetch('/api/admin/logout', { method: 'POST' });
+      window.location.href = '/login.html';
+    }
+
+    async function handleAction(event) {
+      const button = event.target.closest('button[data-action]');
+      if (!button) return;
+
+      const card = button.closest('.submission');
+      const errorEl = card.querySelector('.error');
+      const action = button.dataset.action;
+      errorEl.textContent = '';
+
+      let listing;
+      try {
+        listing = JSON.parse(card.querySelector('textarea').value);
+      } catch (err) {
+        errorEl.textContent = 'Listing JSON is invalid.';
+        return;
+      }
+
+      const body = { action, listing };
+      if (action === 'deny') {
+        body.denialReason = prompt('Reason for denial?') || '';
+      }
+
+      try {
+        await api(`/api/admin/submissions/${encodeURIComponent(card.dataset.id)}`, {
+          method: 'PATCH',
+          body: JSON.stringify(body)
+        });
+        await loadSubmissions();
+      } catch (err) {
+        errorEl.textContent = err.message;
+      }
+    }
+
+    document.getElementById('refresh').addEventListener('click', loadSubmissions);
+    document.getElementById('logout').addEventListener('click', logout);
+    submissionsEl.addEventListener('click', handleAction);
+
+    requireLogin();
+  </script>
+</body>
+</html>
