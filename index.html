@@ -10,6 +10,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+
   <style>
     :root {
       --sunset-start: #FF6B35;
@@ -32,15 +35,8 @@
       --radius-sm: 12px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: var(--font-body);
@@ -76,13 +72,10 @@
       background: linear-gradient(to bottom, #1A0A2E 0%, #2D1B4E 30%, #8B4B6B 55%, #E8956B 75%, #F4C05C 90%, #FFE4A0 100%);
     }
 
-    /* Stars at top */
     .hero::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       height: 40%;
       background-image:
         radial-gradient(2px 2px at 20% 15%, white 100%, transparent),
@@ -91,46 +84,25 @@
         radial-gradient(2px 2px at 80% 12%, white 100%, transparent),
         radial-gradient(1px 1px at 10% 25%, white 100%, transparent),
         radial-gradient(1px 1px at 70% 5%, white 100%, transparent),
-        radial-gradient(2px 2px at 90% 22%, white 100%, transparent),
-        radial-gradient(1px 1px at 30% 18%, white 100%, transparent),
-        radial-gradient(1px 1px at 50% 10%, white 100%, transparent);
+        radial-gradient(2px 2px at 90% 22%, white 100%, transparent);
       opacity: 0.6;
       z-index: 1;
-      pointer-events: none;
     }
 
-    /* Sun glow */
     .sun {
       position: absolute;
-      bottom: 15%;
-      left: 50%;
+      bottom: 15%; left: 50%;
       transform: translateX(-50%);
-      width: 180px;
-      height: 180px;
+      width: 180px; height: 180px;
       background: radial-gradient(circle, #FFF9E6 0%, #FFD54F 30%, #FF9800 60%, transparent 70%);
       border-radius: 50%;
       z-index: 1;
       filter: blur(2px);
     }
 
-    .sun::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(255,200,100,0.4) 0%, transparent 60%);
-      border-radius: 50%;
-    }
-
-    /* Ocean */
     .ocean {
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      bottom: 0; left: 0; right: 0;
       height: 18%;
       background: linear-gradient(to bottom, #1A5276 0%, #154360 50%, #0E2F44 100%);
       z-index: 2;
@@ -139,55 +111,40 @@
     .ocean::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       height: 8px;
       background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
     }
 
-    /* Sun reflection on water */
     .ocean::after {
       content: '';
       position: absolute;
-      top: 10px;
-      left: 50%;
+      top: 10px; left: 50%;
       transform: translateX(-50%);
-      width: 120px;
-      height: 80%;
-      background: linear-gradient(to bottom,
-        rgba(255, 200, 100, 0.5) 0%,
-        rgba(255, 180, 80, 0.3) 30%,
-        rgba(255, 160, 60, 0.15) 60%,
-        transparent 100%
-      );
+      width: 120px; height: 80%;
+      background: linear-gradient(to bottom, rgba(255,200,100,0.5) 0%, rgba(255,180,80,0.3) 30%, transparent 100%);
       filter: blur(8px);
       border-radius: 50% 50% 0 0;
     }
 
-    /* Palm trees - left */
     .palm-left {
       position: absolute;
-      bottom: 12%;
-      left: -20px;
+      bottom: 12%; left: -20px;
       z-index: 3;
       opacity: 0.9;
     }
 
     .palm-right {
       position: absolute;
-      bottom: 12%;
-      right: -30px;
+      bottom: 12%; right: -30px;
       z-index: 3;
       opacity: 0.9;
       transform: scaleX(-1);
     }
 
-    /* Cocktail glass decoration */
     .cocktail-icon {
       position: absolute;
-      top: 20px;
-      right: 10%;
+      top: 20px; right: 10%;
       z-index: 4;
       opacity: 0.85;
       animation: float 4s ease-in-out infinite;
@@ -220,8 +177,7 @@
     }
 
     .hero-badge .pulse {
-      width: 8px;
-      height: 8px;
+      width: 8px; height: 8px;
       background: #4ADE80;
       border-radius: 50%;
       animation: pulse 2s ease-in-out infinite;
@@ -259,10 +215,8 @@
       font-size: clamp(1rem, 2.5vw, 1.375rem);
       color: rgba(255,255,255,0.9);
       margin-bottom: 36px;
-      font-weight: 400;
     }
 
-    /* Live counter */
     .live-counter {
       display: inline-flex;
       align-items: center;
@@ -298,11 +252,9 @@
       color: var(--night-soft);
     }
 
-    /* Scroll indicator */
     .scroll-hint {
       position: absolute;
-      bottom: 24%;
-      left: 50%;
+      bottom: 24%; left: 50%;
       transform: translateX(-50%);
       z-index: 10;
       color: white;
@@ -322,7 +274,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      padding: 20px 24px;
+      padding: 16px 24px;
     }
 
     .filters-container {
@@ -331,45 +283,82 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      gap: 16px;
       flex-wrap: wrap;
     }
 
     .filters {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
+      align-items: center;
     }
 
-    .filter-btn {
+    .filter-btn, .view-btn, .location-btn {
       appearance: none;
       background: var(--sand-warm);
       border: 2px solid transparent;
       color: var(--night);
       font-family: var(--font-body);
-      font-size: 0.9375rem;
+      font-size: 0.875rem;
       font-weight: 500;
-      padding: 12px 24px;
+      padding: 10px 20px;
       border-radius: 100px;
       cursor: pointer;
       transition: all 0.2s;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%230F172A' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 16px center;
-      padding-right: 40px;
     }
 
-    .filter-btn:hover {
+    .filter-btn {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%230F172A' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+    }
+
+    .filter-btn:hover, .view-btn:hover, .location-btn:hover {
       background-color: var(--sunset-end);
     }
 
-    .filter-btn:focus {
-      border-color: var(--sunset-start);
+    .view-btn.active, .location-btn.active {
+      background: var(--night);
+      color: white;
+    }
+
+    .location-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .location-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .view-toggle {
+      display: flex;
+      gap: 4px;
+      background: var(--sand-warm);
+      padding: 4px;
+      border-radius: 100px;
+    }
+
+    .view-toggle .view-btn {
+      padding: 8px 16px;
+      background: transparent;
+    }
+
+    .view-toggle .view-btn.active {
+      background: var(--night);
+      color: white;
     }
 
     .results-info {
-      font-size: 0.9375rem;
+      font-size: 0.875rem;
       color: var(--night-soft);
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     .results-info strong {
@@ -377,17 +366,94 @@
       font-weight: 700;
     }
 
+    .distance-info {
+      color: var(--ocean);
+      font-weight: 500;
+    }
+
+    /* ===== MAP ===== */
+    .map-container {
+      height: 500px;
+      display: none;
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 32px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .map-container.active {
+      display: block;
+    }
+
+    #map {
+      height: 100%;
+      width: 100%;
+    }
+
+    .leaflet-popup-content-wrapper {
+      border-radius: var(--radius-sm);
+      padding: 0;
+    }
+
+    .leaflet-popup-content {
+      margin: 0;
+      min-width: 200px;
+    }
+
+    .map-popup {
+      padding: 12px;
+    }
+
+    .map-popup h3 {
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      margin-bottom: 4px;
+    }
+
+    .map-popup .vibe {
+      font-size: 0.75rem;
+      color: var(--ocean);
+      margin-bottom: 8px;
+    }
+
+    .map-popup .time {
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .map-popup .deals {
+      font-size: 0.75rem;
+      color: var(--night-soft);
+      margin-bottom: 8px;
+    }
+
+    .map-popup a {
+      display: inline-block;
+      background: var(--night);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
     /* ===== MAIN GRID ===== */
     .main {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 48px 24px 80px;
+      padding: 32px 24px 80px;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-      gap: 32px;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 28px;
+    }
+
+    .grid.hidden {
+      display: none;
     }
 
     /* ===== CARD ===== */
@@ -395,29 +461,23 @@
       background: white;
       border-radius: var(--radius);
       overflow: hidden;
-      box-shadow:
-        0 1px 3px rgba(0,0,0,0.04),
-        0 8px 24px rgba(0,0,0,0.06);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.06);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
     }
 
     .card:hover {
       transform: translateY(-8px);
-      box-shadow:
-        0 12px 32px rgba(0,0,0,0.1),
-        0 24px 60px rgba(0,0,0,0.08);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.1), 0 24px 60px rgba(0,0,0,0.08);
     }
 
     .card.is-live {
-      box-shadow:
-        0 0 0 3px var(--palm),
-        0 12px 32px rgba(34, 197, 94, 0.2);
+      box-shadow: 0 0 0 3px var(--palm), 0 12px 32px rgba(34, 197, 94, 0.2);
     }
 
     .card-image {
       position: relative;
-      height: 220px;
+      height: 200px;
       overflow: hidden;
     }
 
@@ -440,25 +500,23 @@
 
     .card-image .live-badge {
       position: absolute;
-      top: 16px;
-      left: 16px;
+      top: 12px; left: 12px;
       display: flex;
       align-items: center;
       gap: 6px;
       background: var(--palm);
       color: white;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      padding: 6px 14px;
+      padding: 5px 12px;
       border-radius: 100px;
       box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
     }
 
     .card-image .live-badge .dot {
-      width: 6px;
-      height: 6px;
+      width: 5px; height: 5px;
       background: white;
       border-radius: 50%;
       animation: pulse 1.5s ease-in-out infinite;
@@ -466,21 +524,29 @@
 
     .card-image .neighborhood-tag {
       position: absolute;
-      top: 16px;
-      right: 16px;
+      top: 12px; right: 12px;
       background: rgba(255,255,255,0.95);
       color: var(--night);
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 600;
-      padding: 6px 12px;
+      padding: 5px 10px;
+      border-radius: 100px;
+    }
+
+    .card-image .distance-tag {
+      position: absolute;
+      top: 12px; right: 12px;
+      background: var(--ocean);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 5px 10px;
       border-radius: 100px;
     }
 
     .card-image .time-overlay {
       position: absolute;
-      bottom: 16px;
-      left: 16px;
-      right: 16px;
+      bottom: 12px; left: 12px; right: 12px;
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
@@ -488,93 +554,66 @@
 
     .card-image .venue-name {
       font-family: var(--font-display);
-      font-size: 1.75rem;
+      font-size: 1.5rem;
       font-weight: 600;
       color: white;
       text-shadow: 0 2px 8px rgba(0,0,0,0.3);
       line-height: 1.1;
-      max-width: 70%;
+      max-width: 65%;
     }
 
     .card-image .time-badge {
       background: white;
       color: var(--night);
       font-weight: 700;
-      font-size: 0.875rem;
-      padding: 8px 14px;
+      font-size: 0.8rem;
+      padding: 6px 12px;
       border-radius: var(--radius-sm);
       white-space: nowrap;
     }
 
     .card-body {
-      padding: 24px;
+      padding: 20px;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
     }
 
     .card-vibe {
-      display: inline-block;
-      font-size: 0.8125rem;
+      font-size: 0.75rem;
       font-weight: 600;
       color: var(--ocean);
       background: rgba(8, 145, 178, 0.1);
-      padding: 4px 12px;
+      padding: 4px 10px;
       border-radius: 100px;
+    }
+
+    .card-distance {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--sunset-start);
+    }
+
+    .week-row {
+      display: flex;
+      gap: 4px;
       margin-bottom: 16px;
     }
 
-    .card-deals {
-      margin-bottom: 20px;
-    }
-
-    .card-deals h3 {
-      font-size: 0.6875rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--night-soft);
-      margin-bottom: 10px;
-    }
-
-    .deal-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .deal {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: linear-gradient(135deg, var(--sunset-end) 0%, var(--sunset-mid) 100%);
-      color: var(--night);
-      font-size: 0.8125rem;
-      font-weight: 600;
-      padding: 8px 14px;
-      border-radius: var(--radius-sm);
-    }
-
-    .deal svg {
-      flex-shrink: 0;
-    }
-
-    /* Week dots */
-    .week-row {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 20px;
-    }
-
     .week-dot {
-      width: 32px;
-      height: 32px;
+      width: 28px; height: 28px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.6875rem;
+      font-size: 0.625rem;
       font-weight: 600;
       background: var(--sand-warm);
       color: var(--night-soft);
-      transition: all 0.2s;
     }
 
     .week-dot.active {
@@ -586,22 +625,53 @@
       box-shadow: 0 0 0 2px var(--violet);
     }
 
+    .card-deals h3 {
+      font-size: 0.625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--night-soft);
+      margin-bottom: 8px;
+    }
+
+    .deal-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .deal {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: linear-gradient(135deg, var(--sunset-end) 0%, var(--sunset-mid) 100%);
+      color: var(--night);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+    }
+
     .card-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-top: 16px;
+      padding-top: 14px;
       border-top: 1px solid var(--sand-warm);
+      gap: 12px;
     }
 
     .card-address {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 0.875rem;
+      gap: 6px;
+      font-size: 0.8rem;
       color: var(--night-soft);
       text-decoration: none;
       transition: color 0.2s;
+      flex: 1;
+      min-width: 0;
     }
 
     .card-address:hover {
@@ -610,6 +680,13 @@
 
     .card-address svg {
       color: var(--sunset-start);
+      flex-shrink: 0;
+    }
+
+    .card-address span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .card-cta {
@@ -618,12 +695,13 @@
       gap: 6px;
       background: var(--night);
       color: white;
-      font-size: 0.8125rem;
+      font-size: 0.8rem;
       font-weight: 600;
       padding: 10px 18px;
       border-radius: 100px;
       text-decoration: none;
       transition: background 0.2s;
+      flex-shrink: 0;
     }
 
     .card-cta:hover {
@@ -657,7 +735,7 @@
 
     footer p {
       opacity: 0.7;
-      font-size: 0.9375rem;
+      font-size: 0.9rem;
     }
 
     footer a {
@@ -672,25 +750,15 @@
 
     .disclaimer {
       margin-top: 16px;
-      font-size: 0.8125rem;
+      font-size: 0.8rem;
       opacity: 0.5;
     }
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       .hero {
-        min-height: 80vh;
-        padding: 48px 20px;
-      }
-
-      .live-counter {
-        flex-direction: column;
-        text-align: center;
-        padding: 20px 32px;
-      }
-
-      .live-counter .label {
-        text-align: center;
+        min-height: 70vh;
+        padding: 60px 20px 80px;
       }
 
       .filters-container {
@@ -699,20 +767,31 @@
       }
 
       .filters {
-        width: 100%;
+        flex-wrap: wrap;
       }
 
       .filter-btn {
         flex: 1;
-        text-align: left;
+        min-width: 100px;
       }
 
       .grid {
         grid-template-columns: 1fr;
       }
 
-      .card-image {
-        height: 200px;
+      .map-container {
+        height: 400px;
+        border-radius: var(--radius-sm);
+      }
+
+      .live-counter {
+        flex-direction: column;
+        text-align: center;
+        padding: 16px 28px;
+      }
+
+      .live-counter .label {
+        text-align: center;
       }
     }
   </style>
@@ -721,37 +800,26 @@
 
   <!-- HERO -->
   <section class="hero">
-    <!-- Sun -->
     <div class="sun"></div>
-
-    <!-- Ocean -->
     <div class="ocean"></div>
 
-    <!-- Palm tree left -->
     <div class="palm-left">
       <svg width="200" height="320" viewBox="0 0 200 320" fill="none">
-        <!-- Trunk -->
         <path d="M95 320 L90 180 Q88 160 92 140 L98 140 Q102 160 100 180 L105 320 Z" fill="#2D1810"/>
-        <path d="M92 320 L88 200 Q86 180 90 160" stroke="#1A0F0A" stroke-width="2" fill="none"/>
-        <!-- Fronds -->
         <path d="M94 145 Q60 120 20 130 Q50 110 94 140" fill="#1B3D2F"/>
         <path d="M96 140 Q70 100 40 80 Q70 85 96 135" fill="#234D3A"/>
         <path d="M98 138 Q90 80 70 40 Q100 70 100 135" fill="#1B3D2F"/>
         <path d="M100 138 Q120 70 150 30 Q115 75 102 135" fill="#234D3A"/>
         <path d="M102 140 Q140 90 175 70 Q135 100 104 138" fill="#1B3D2F"/>
         <path d="M104 145 Q150 120 190 125 Q145 115 104 142" fill="#234D3A"/>
-        <!-- Coconuts -->
         <circle cx="92" cy="148" r="6" fill="#3D2817"/>
         <circle cx="102" cy="146" r="5" fill="#4A3020"/>
       </svg>
     </div>
 
-    <!-- Palm tree right -->
     <div class="palm-right">
       <svg width="180" height="280" viewBox="0 0 180 280" fill="none">
-        <!-- Trunk -->
         <path d="M85 280 L82 160 Q80 145 84 130 L90 130 Q94 145 92 160 L95 280 Z" fill="#2D1810"/>
-        <!-- Fronds -->
         <path d="M86 135 Q55 115 20 120 Q48 100 86 130" fill="#1B3D2F"/>
         <path d="M88 130 Q65 95 40 75 Q68 82 88 125" fill="#234D3A"/>
         <path d="M90 128 Q85 75 70 40 Q95 68 92 125" fill="#1B3D2F"/>
@@ -761,21 +829,14 @@
       </svg>
     </div>
 
-    <!-- Cocktail glass decoration -->
     <div class="cocktail-icon">
       <svg width="70" height="90" viewBox="0 0 70 90" fill="none">
-        <!-- Glass -->
         <path d="M10 10 L35 50 L60 10 Z" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
-        <!-- Stem -->
         <line x1="35" y1="50" x2="35" y2="75" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
-        <!-- Base -->
         <ellipse cx="35" cy="78" rx="15" ry="4" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
-        <!-- Liquid -->
         <path d="M18 20 L35 42 L52 20 Z" fill="#FF6B6B" opacity="0.8"/>
-        <!-- Lime -->
         <circle cx="28" cy="18" r="6" fill="#4ADE80" opacity="0.9"/>
         <path d="M25 18 Q28 15 31 18" stroke="#22C55E" stroke-width="1.5" fill="none"/>
-        <!-- Umbrella -->
         <path d="M42 8 Q50 5 55 15 L42 12 Z" fill="#FFD23F"/>
         <line x1="42" y1="8" x2="42" y2="25" stroke="#8B4513" stroke-width="1.5"/>
       </svg>
@@ -795,7 +856,7 @@
       <p class="hero-tagline">The best deals happening right now, from Little Italy to PB</p>
 
       <div class="live-counter">
-        <span class="number" id="live-count-big">8</span>
+        <span class="number" id="live-count-big">0</span>
         <div class="label">
           <strong>spots live right now</strong>
           <span>Scroll to explore</span>
@@ -833,16 +894,36 @@
           <option value="">All spots</option>
           <option value="now">Live now</option>
         </select>
+
+        <button class="location-btn" id="location-btn">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+            <circle cx="12" cy="9" r="2.5"/>
+          </svg>
+          <span id="location-text">Near me</span>
+        </button>
+
+        <div class="view-toggle">
+          <button class="view-btn active" id="list-view-btn">List</button>
+          <button class="view-btn" id="map-view-btn">Map</button>
+        </div>
       </div>
 
       <div class="results-info">
-        <strong id="result-count">20</strong> happy hours found
+        <span><strong id="result-count">0</strong> spots</span>
+        <span class="distance-info" id="distance-info" style="display: none;"></span>
       </div>
     </div>
   </section>
 
-  <!-- MAIN GRID -->
+  <!-- MAIN -->
   <main class="main">
+    <!-- Map -->
+    <div class="map-container" id="map-container">
+      <div id="map"></div>
+    </div>
+
+    <!-- Grid -->
     <div class="grid" id="grid"></div>
 
     <div class="empty-state" id="empty-state" style="display: none;">
@@ -853,18 +934,24 @@
 
   <!-- FOOTER -->
   <footer>
-    <p>Built by Shane & John in sunny San Diego | <a href="mailto:hello@sdhappyhours.com">Submit a spot</a></p>
-    <p class="disclaimer">Happy hour details may change. Always verify with the venue before visiting.</p>
+    <p>Built by Shane & John in San Diego | <a href="mailto:hello@sdhappyhours.com">Submit a spot</a></p>
+    <p class="disclaimer">Happy hour details are community-sourced. Always verify with the venue before visiting.</p>
   </footer>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
   <script>
     let happyHours = [];
+    let userLocation = null;
+    let map = null;
+    let markers = [];
+
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const dayAbbrev = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
     const today = dayNames[new Date().getDay()];
     const todayIndex = new Date().getDay();
 
-    // Unsplash images for different vibes
     const vibeImages = {
       'Upscale casual': 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&q=80',
       'Speakeasy': 'https://images.unsplash.com/photo-1527761939622-933f3c8e0a94?w=800&q=80',
@@ -884,25 +971,149 @@
       'Arcade bar': 'https://images.unsplash.com/photo-1511882150382-421056c89033?w=800&q=80',
       'All-day cafe': 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80',
       'Italian gastropub': 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80',
-      'Farm-to-table': 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80',
+      'Vegan metal bar': 'https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=800&q=80',
       'Beach brewery': 'https://images.unsplash.com/photo-1559526324-593bc073d938?w=800&q=80',
       'default': 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800&q=80'
     };
 
     document.getElementById('day-filter').value = today;
 
-    // Update time
+    // Update time display
     function updateTime() {
       const now = new Date();
       const h = now.getHours();
       const m = now.getMinutes();
       const ampm = h >= 12 ? 'PM' : 'AM';
       const hour = h % 12 || 12;
-      document.getElementById('current-time').textContent =
-        `${hour}:${m.toString().padStart(2, '0')} ${ampm}`;
+      document.getElementById('current-time').textContent = `${hour}:${m.toString().padStart(2, '0')} ${ampm}`;
     }
     updateTime();
     setInterval(updateTime, 30000);
+
+    // Distance calculation
+    function getDistance(lat1, lng1, lat2, lng2) {
+      const R = 3959; // Earth's radius in miles
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLng = (lng2 - lng1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLng/2) * Math.sin(dLng/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    function formatDistance(miles) {
+      if (miles < 0.1) return 'Nearby';
+      if (miles < 1) return `${(miles * 5280 / 1000).toFixed(1)}k ft`;
+      return `${miles.toFixed(1)} mi`;
+    }
+
+    // Geolocation
+    document.getElementById('location-btn').addEventListener('click', () => {
+      const btn = document.getElementById('location-btn');
+      const text = document.getElementById('location-text');
+
+      if (userLocation) {
+        userLocation = null;
+        btn.classList.remove('active');
+        text.textContent = 'Near me';
+        document.getElementById('distance-info').style.display = 'none';
+        render();
+        return;
+      }
+
+      text.textContent = 'Locating...';
+
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          btn.classList.add('active');
+          text.textContent = 'Sorted by distance';
+          document.getElementById('distance-info').textContent = 'Sorted by distance';
+          document.getElementById('distance-info').style.display = 'inline';
+          render();
+          if (map) {
+            map.setView([userLocation.lat, userLocation.lng], 13);
+          }
+        },
+        (err) => {
+          text.textContent = 'Near me';
+          alert('Could not get your location. Please enable location services.');
+        }
+      );
+    });
+
+    // View toggle
+    document.getElementById('list-view-btn').addEventListener('click', () => {
+      document.getElementById('list-view-btn').classList.add('active');
+      document.getElementById('map-view-btn').classList.remove('active');
+      document.getElementById('map-container').classList.remove('active');
+      document.getElementById('grid').classList.remove('hidden');
+    });
+
+    document.getElementById('map-view-btn').addEventListener('click', () => {
+      document.getElementById('map-view-btn').classList.add('active');
+      document.getElementById('list-view-btn').classList.remove('active');
+      document.getElementById('map-container').classList.add('active');
+      document.getElementById('grid').classList.add('hidden');
+
+      if (!map) {
+        initMap();
+      }
+      setTimeout(() => map.invalidateSize(), 100);
+      updateMapMarkers();
+    });
+
+    function initMap() {
+      const center = userLocation || { lat: 32.7157, lng: -117.1611 };
+      map = L.map('map').setView([center.lat, center.lng], 12);
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19
+      }).addTo(map);
+    }
+
+    function updateMapMarkers() {
+      if (!map) return;
+
+      markers.forEach(m => map.removeLayer(m));
+      markers = [];
+
+      const filtered = getFilteredData();
+
+      filtered.forEach(h => {
+        const isLive = isHappeningNow(h);
+        const icon = L.divIcon({
+          className: 'custom-marker',
+          html: `<div style="
+            background: ${isLive ? '#22C55E' : '#FF6B35'};
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: bold; font-size: 12px;
+          ">${isLive ? '!' : ''}</div>`,
+          iconSize: [32, 32],
+          iconAnchor: [16, 16]
+        });
+
+        const marker = L.marker([h.lat, h.lng], { icon })
+          .bindPopup(`
+            <div class="map-popup">
+              <h3>${h.name}</h3>
+              <div class="vibe">${h.vibe}</div>
+              <div class="time">${formatTime(h.startTime)} – ${formatTime(h.endTime)}</div>
+              <div class="deals">${h.deals.slice(0, 2).join(' • ')}</div>
+              <a href="${h.website}" target="_blank">View website</a>
+            </div>
+          `)
+          .addTo(map);
+
+        markers.push(marker);
+      });
+    }
 
     async function loadData() {
       const res = await fetch('/data/happy-hours.json');
@@ -940,31 +1151,46 @@
       return vibeImages[vibe] || vibeImages['default'];
     }
 
-    function render() {
+    function getFilteredData() {
       const dayFilter = document.getElementById('day-filter').value;
       const neighborhoodFilter = document.getElementById('neighborhood-filter').value;
       const statusFilter = document.getElementById('status-filter').value;
 
-      let filtered = happyHours;
+      let filtered = [...happyHours];
 
       if (dayFilter) filtered = filtered.filter(h => h.days.includes(dayFilter));
       if (neighborhoodFilter) filtered = filtered.filter(h => h.neighborhood === neighborhoodFilter);
       if (statusFilter === 'now') filtered = filtered.filter(h => isHappeningNow(h));
 
-      filtered.sort((a, b) => {
-        const aLive = isHappeningNow(a);
-        const bLive = isHappeningNow(b);
-        if (aLive && !bLive) return -1;
-        if (!aLive && bLive) return 1;
-        return a.startTime.localeCompare(b.startTime);
-      });
+      // Add distance if we have user location
+      if (userLocation) {
+        filtered = filtered.map(h => ({
+          ...h,
+          distance: getDistance(userLocation.lat, userLocation.lng, h.lat, h.lng)
+        }));
+        filtered.sort((a, b) => a.distance - b.distance);
+      } else {
+        filtered.sort((a, b) => {
+          const aLive = isHappeningNow(a);
+          const bLive = isHappeningNow(b);
+          if (aLive && !bLive) return -1;
+          if (!aLive && bLive) return 1;
+          return a.startTime.localeCompare(b.startTime);
+        });
+      }
+
+      return filtered;
+    }
+
+    function render() {
+      const filtered = getFilteredData();
 
       const grid = document.getElementById('grid');
       const empty = document.getElementById('empty-state');
       const countEl = document.getElementById('result-count');
       const liveCountBig = document.getElementById('live-count-big');
 
-      const liveNow = filtered.filter(h => isHappeningNow(h)).length;
+      const liveNow = happyHours.filter(h => isHappeningNow(h)).length;
       countEl.textContent = filtered.length;
       liveCountBig.textContent = liveNow;
 
@@ -980,6 +1206,7 @@
       grid.innerHTML = filtered.map(h => {
         const isLive = isHappeningNow(h);
         const img = getImage(h.vibe);
+        const hasDistance = h.distance !== undefined;
 
         const weekDots = dayNames.map((day, i) => {
           const active = h.days.includes(day);
@@ -992,48 +1219,49 @@
 
         return `
           <article class="card ${isLive ? 'is-live' : ''}">
-            <div class="card-image">
-              <img src="${img}" alt="${h.name}" loading="lazy">
-              <div class="overlay"></div>
-              ${isLive ? '<div class="live-badge"><span class="dot"></span> Live Now</div>' : ''}
-              <span class="neighborhood-tag">${h.neighborhood}</span>
-              <div class="time-overlay">
-                <span class="venue-name">${h.name}</span>
-                <span class="time-badge">${formatTime(h.startTime)} – ${formatTime(h.endTime)}</span>
+            <a href="${h.website}" target="_blank" rel="noopener" style="text-decoration: none; color: inherit;">
+              <div class="card-image">
+                <img src="${img}" alt="${h.name}" loading="lazy">
+                <div class="overlay"></div>
+                ${isLive ? '<div class="live-badge"><span class="dot"></span> Live Now</div>' : ''}
+                ${hasDistance
+                  ? `<span class="distance-tag">${formatDistance(h.distance)}</span>`
+                  : `<span class="neighborhood-tag">${h.neighborhood}</span>`
+                }
+                <div class="time-overlay">
+                  <span class="venue-name">${h.name}</span>
+                  <span class="time-badge">${formatTime(h.startTime)} – ${formatTime(h.endTime)}</span>
+                </div>
               </div>
-            </div>
+            </a>
 
             <div class="card-body">
-              <span class="card-vibe">${h.vibe}</span>
+              <div class="card-meta">
+                <span class="card-vibe">${h.vibe}</span>
+                ${hasDistance ? `<span class="card-distance">${h.neighborhood}</span>` : ''}
+              </div>
 
               <div class="week-row">${weekDots}</div>
 
               <div class="card-deals">
-                <h3>Today's Deals</h3>
+                <h3>Deals</h3>
                 <div class="deal-grid">
-                  ${h.deals.slice(0, 3).map(d => `
-                    <span class="deal">
-                      <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                      </svg>
-                      ${d}
-                    </span>
-                  `).join('')}
+                  ${h.deals.slice(0, 3).map(d => `<span class="deal">${d}</span>`).join('')}
                 </div>
               </div>
 
               <div class="card-footer">
-                <a class="card-address" href="https://maps.google.com/?q=${encodeURIComponent(h.address + ', San Diego, CA')}" target="_blank">
-                  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <a class="card-address" href="https://maps.google.com/?q=${encodeURIComponent(h.address + ', San Diego, CA')}" target="_blank" rel="noopener">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
                     <circle cx="12" cy="10" r="3"/>
                   </svg>
-                  ${h.address}
+                  <span>${h.address}</span>
                 </a>
-                <a class="card-cta" href="${h.website}" target="_blank">
-                  View
-                  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                <a class="card-cta" href="${h.website}" target="_blank" rel="noopener">
+                  Website
+                  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
                   </svg>
                 </a>
               </div>
@@ -1041,6 +1269,11 @@
           </article>
         `;
       }).join('');
+
+      // Update map if visible
+      if (document.getElementById('map-container').classList.contains('active')) {
+        updateMapMarkers();
+      }
     }
 
     document.getElementById('day-filter').addEventListener('change', render);
