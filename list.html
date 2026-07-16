@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shared Happy Hour List | SD Happy Hours</title>
+  <style>
+    :root {
+      --ink: #0F172A;
+      --muted: #64748B;
+      --line: #E2E8F0;
+      --paper: #FFFFFF;
+      --wash: #F8FAFC;
+      --accent: #FF6B35;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      background: var(--wash);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1A0A2E, #8B4B6B 60%, #F4C05C);
+      color: white;
+      padding: 34px 20px;
+    }
+
+    .wrap {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    a {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    header a {
+      color: white;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 6vw, 4rem);
+      line-height: 1;
+      margin: 28px 0 10px;
+    }
+
+    header p {
+      color: rgba(255,255,255,0.86);
+      margin: 0;
+    }
+
+    main {
+      padding: 26px 20px 70px;
+    }
+
+    .list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 8px 32px rgba(15, 23, 42, 0.06);
+      padding: 18px;
+    }
+
+    .card-head {
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 1.18rem;
+      margin: 0 0 4px;
+    }
+
+    .meta,
+    .note {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .pill {
+      background: #FEF3C7;
+      border-radius: 100px;
+      color: #92400E;
+      font-size: 0.72rem;
+      font-weight: 900;
+      padding: 6px 9px;
+      white-space: nowrap;
+    }
+
+    .empty {
+      color: var(--muted);
+      font-weight: 700;
+      padding: 20px 0;
+    }
+
+    @media (max-width: 680px) {
+      .card-head {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a href="/">Back to SD Happy Hours</a>
+      <h1 id="title">Shared Happy Hour List</h1>
+      <p id="subtitle">Loading saved spots...</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="list" id="list"></div>
+  </main>
+
+  <script>
+    function escapeHTML(value) {
+      return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char]));
+    }
+
+    function statusLabel(status) {
+      return {
+        favorite: 'Favorite',
+        'want-to-try': 'Want to try',
+        'been-to': 'Been to'
+      }[status] || 'Favorite';
+    }
+
+    async function loadSharedList() {
+      const shareId = new URLSearchParams(window.location.search).get('id');
+      const listEl = document.getElementById('list');
+      if (!shareId) {
+        document.getElementById('subtitle').textContent = 'Missing shared list ID.';
+        listEl.innerHTML = '<div class="empty">Ask your friend for their full share link.</div>';
+        return;
+      }
+
+      const res = await fetch(`/api/shared-lists/${encodeURIComponent(shareId)}`);
+      const data = await res.json();
+      if (!res.ok) {
+        document.getElementById('subtitle').textContent = (data.errors || ['Shared list not found.']).join(' ');
+        return;
+      }
+
+      document.getElementById('title').textContent = `${data.name}'s Happy Hour List`;
+      document.getElementById('subtitle').textContent = `${data.spots.length} saved spot${data.spots.length === 1 ? '' : 's'}`;
+
+      if (!data.spots.length) {
+        listEl.innerHTML = '<div class="empty">This list does not have any saved spots yet.</div>';
+        return;
+      }
+
+      listEl.innerHTML = data.spots.map(item => `
+        <article class="card">
+          <div class="card-head">
+            <div>
+              <h2>${escapeHTML(item.spot.name)}</h2>
+              <div class="meta">${escapeHTML(item.spot.neighborhood)} · ${escapeHTML(item.spot.deals.slice(0, 3).join(' · '))}</div>
+            </div>
+            <span class="pill">${statusLabel(item.status)}</span>
+          </div>
+          ${item.note ? `<div class="note">${escapeHTML(item.note)}</div>` : ''}
+          <div class="meta"><a href="${escapeHTML(item.spot.website)}" target="_blank" rel="noopener">Venue website</a></div>
+        </article>
+      `).join('');
+    }
+
+    loadSharedList();
+  </script>
+</body>
+</html>

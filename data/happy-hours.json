@@ -12,7 +12,11 @@
     "deals": ["$1.50 oysters", "$6 beers", "$8 wines", "$9 cocktails"],
     "vibe": "Seafood spot",
     "website": "https://ironsidefishandoyster.com",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://ironsidefishandoyster.com",
+    "dealTypes": ["oysters", "beer", "wine", "cocktails", "food"],
+    "features": ["seafood", "date night", "upscale"]
   },
   {
     "id": 2,
@@ -27,7 +31,11 @@
     "deals": ["$8 cocktails", "$5 draft beers", "$6 wines", "Half-price snacks"],
     "vibe": "Trendy gastropub",
     "website": "https://consortium-holdings.com/craft-commerce",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://consortium-holdings.com/craft-commerce",
+    "dealTypes": ["cocktails", "beer", "wine", "food"],
+    "features": ["date night", "group friendly", "cocktail bar"]
   },
   {
     "id": 3,
@@ -42,7 +50,11 @@
     "deals": ["$10 classic cocktails", "$8 beer & wine"],
     "vibe": "Speakeasy",
     "website": "https://www.raisedbywolvessd.com",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://www.raisedbywolvessd.com",
+    "dealTypes": ["cocktails", "beer", "wine"],
+    "features": ["date night", "speakeasy", "upscale"]
   },
   {
     "id": 4,
@@ -57,7 +69,11 @@
     "deals": ["$6 wells", "$7 house wine", "$5 select beers"],
     "vibe": "Upscale casual",
     "website": "https://waterfrontbarandgrill.com",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://waterfrontbarandgrill.com",
+    "dealTypes": ["cocktails", "beer", "wine"],
+    "features": ["casual", "historic", "group friendly"]
   },
   {
     "id": 5,
@@ -72,7 +88,11 @@
     "deals": ["$6 wells", "$5 drafts", "$7 wines", "$5 appetizers"],
     "vibe": "Rooftop vibes",
     "website": "https://www.rusticroot.com",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://www.rusticroot.com",
+    "dealTypes": ["cocktails", "beer", "wine", "food"],
+    "features": ["rooftop", "date night", "group friendly"]
   },
   {
     "id": 6,
@@ -87,7 +107,11 @@
     "deals": ["$8 margaritas", "$5 tacos", "$6 Mexican beers"],
     "vibe": "Modern Mexican",
     "website": "https://www.bracerococina.com",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://www.bracerococina.com",
+    "dealTypes": ["cocktails", "beer", "food"],
+    "features": ["mexican", "tacos", "date night"]
   },
   {
     "id": 7,
@@ -102,7 +126,11 @@
     "deals": ["$10 tiki cocktails", "Half-price pupus"],
     "vibe": "Tiki bar",
     "website": "https://falseidoltiki.com",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://falseidoltiki.com",
+    "dealTypes": ["cocktails", "food"],
+    "features": ["tiki", "date night", "cocktail bar"]
   },
   {
     "id": 8,
@@ -117,7 +145,11 @@
     "deals": ["$9 cocktails", "$7 wines", "$5 beers", "$8 small plates"],
     "vibe": "Chef-driven",
     "website": "https://juniperandivy.com",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://juniperandivy.com",
+    "dealTypes": ["cocktails", "wine", "beer", "food"],
+    "features": ["chef-driven", "date night", "upscale"]
   },
   {
     "id": 9,
@@ -132,7 +164,11 @@
     "deals": ["$5 wine", "$4 beers", "$7 cocktails"],
     "vibe": "Wine bar",
     "website": "https://therosesouthpark.com",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://therosesouthpark.com",
+    "dealTypes": ["wine", "beer", "cocktails"],
+    "features": ["wine bar", "date night", "patio"]
   },
   {
     "id": 10,
@@ -147,7 +183,11 @@
     "deals": ["$8 cocktails", "$6 wines", "$5 beers"],
     "vibe": "Upscale Mediterranean",
     "website": "https://herbandwood.com",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://herbandwood.com",
+    "dealTypes": ["cocktails", "wine", "beer"],
+    "features": ["mediterranean", "date night", "upscale"]
   },
   {
     "id": 11,
@@ -162,7 +202,11 @@
     "deals": ["$4 beers", "$5 wells", "$2 off appetizers"],
     "vibe": "Neighborhood gastropub",
     "website": "https://neighborhoodsd.com",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://neighborhoodsd.com",
+    "dealTypes": ["beer", "cocktails", "food"],
+    "features": ["casual", "group friendly", "gastropub"]
   },
   {
     "id": 12,
@@ -177,7 +221,11 @@
     "deals": ["$9 cocktails", "$5 draft beers"],
     "vibe": "Craft cocktails",
     "website": "https://politeprovisions.com",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://politeprovisions.com",
+    "dealTypes": ["cocktails", "beer"],
+    "features": ["cocktail bar", "date night", "patio"]
   },
   {
     "id": 13,
@@ -192,7 +240,11 @@
     "deals": ["$5 wells", "$4 drafts", "$6 wines", "Half-price apps"],
     "vibe": "Dog-friendly patio",
     "website": "https://thepatio.com",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://thepatio.com",
+    "dealTypes": ["cocktails", "beer", "wine", "food"],
+    "features": ["dog friendly", "patio", "casual"]
   },
   {
     "id": 14,
@@ -207,7 +259,11 @@
     "deals": ["$4 beers", "$6 wines", "$5 chicken sandwich"],
     "vibe": "Casual chicken joint",
     "website": "https://crackshack.com",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://crackshack.com",
+    "dealTypes": ["beer", "wine", "food"],
+    "features": ["casual", "patio", "group friendly"]
   },
   {
     "id": 15,
@@ -222,7 +278,11 @@
     "deals": ["$8 margaritas", "$6 beers", "$7 wines", "$5 tacos"],
     "vibe": "Waterfront Mexican",
     "website": "https://cohnrestaurants.com/coasterra",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://cohnrestaurants.com/coasterra",
+    "dealTypes": ["cocktails", "beer", "wine", "food"],
+    "features": ["waterfront", "mexican", "date night"]
   },
   {
     "id": 16,
@@ -237,7 +297,11 @@
     "deals": ["$5 beers", "$6 wells", "Free arcade games"],
     "vibe": "Arcade bar",
     "website": "https://coinopsd.com",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://coinopsd.com",
+    "dealTypes": ["beer", "cocktails", "entertainment"],
+    "features": ["games", "group friendly", "casual"]
   },
   {
     "id": 17,
@@ -252,7 +316,11 @@
     "deals": ["$6 wines", "$5 beers", "$8 cocktails", "$5 snacks"],
     "vibe": "All-day cafe",
     "website": "https://morningglorysandiego.com",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://morningglorysandiego.com",
+    "dealTypes": ["wine", "beer", "cocktails", "food"],
+    "features": ["brunch", "cafe", "patio"]
   },
   {
     "id": 18,
@@ -267,7 +335,11 @@
     "deals": ["$7 cocktails", "$5 wines", "$4 beers", "$6 pizzas"],
     "vibe": "Italian gastropub",
     "website": "https://lucebarandkitchen.com",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://lucebarandkitchen.com",
+    "dealTypes": ["cocktails", "wine", "beer", "food"],
+    "features": ["italian", "casual", "group friendly"]
   },
   {
     "id": 19,
@@ -282,7 +354,11 @@
     "deals": ["$6 beers", "$8 cocktails", "$5 vegan bites"],
     "vibe": "Vegan metal bar",
     "website": "https://barkindred.com",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://barkindred.com",
+    "dealTypes": ["beer", "cocktails", "food"],
+    "features": ["vegan", "date night", "cocktail bar"]
   },
   {
     "id": 20,
@@ -297,6 +373,10 @@
     "deals": ["$4 house beers", "$5 wells", "$3 off apps"],
     "vibe": "Beach brewery",
     "website": "https://pbalehouse.com",
-    "verified": false
+    "verified": false,
+    "lastVerifiedAt": null,
+    "sourceUrl": "https://pbalehouse.com",
+    "dealTypes": ["beer", "cocktails", "food"],
+    "features": ["beach", "brewery", "group friendly"]
   }
 ]

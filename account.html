@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Happy Hours | SD Happy Hours</title>
+  <style>
+    :root {
+      --ink: #0F172A;
+      --muted: #64748B;
+      --line: #E2E8F0;
+      --paper: #FFFFFF;
+      --wash: #F8FAFC;
+      --accent: #FF6B35;
+      --good: #047857;
+      --bad: #B91C1C;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      background: var(--wash);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1A0A2E, #8B4B6B 60%, #F4C05C);
+      color: white;
+      padding: 32px 20px;
+    }
+
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    nav {
+      margin-bottom: 28px;
+    }
+
+    nav a {
+      color: white;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 6vw, 4rem);
+      line-height: 1;
+      margin: 0 0 10px;
+    }
+
+    p {
+      color: var(--muted);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    header p {
+      color: rgba(255,255,255,0.86);
+      max-width: 660px;
+    }
+
+    main {
+      padding: 26px 20px 70px;
+    }
+
+    .panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 8px 32px rgba(15, 23, 42, 0.06);
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .auth-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .auth-grid.password-hidden {
+      grid-template-columns: minmax(0, 520px);
+    }
+
+    .google-box {
+      display: grid;
+      gap: 12px;
+      justify-items: start;
+    }
+
+    .google-note {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      margin: 0 0 14px;
+    }
+
+    form {
+      display: grid;
+      gap: 12px;
+    }
+
+    label {
+      color: var(--muted);
+      display: grid;
+      font-size: 0.78rem;
+      font-weight: 800;
+      gap: 6px;
+      text-transform: uppercase;
+    }
+
+    input,
+    textarea,
+    select {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--ink);
+      font: inherit;
+      padding: 11px 12px;
+      width: 100%;
+    }
+
+    textarea {
+      min-height: 78px;
+      resize: vertical;
+    }
+
+    button,
+    .button {
+      background: var(--ink);
+      border: 0;
+      border-radius: 100px;
+      color: white;
+      cursor: pointer;
+      display: inline-flex;
+      font: inherit;
+      font-weight: 800;
+      justify-content: center;
+      padding: 11px 16px;
+      text-decoration: none;
+    }
+
+    button.secondary,
+    .button.secondary {
+      background: #E2E8F0;
+      color: var(--ink);
+    }
+
+    .status {
+      color: var(--muted);
+      font-weight: 700;
+      min-height: 1.3em;
+    }
+
+    .status.error {
+      color: var(--bad);
+    }
+
+    .account-head {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .saved-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .saved-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+    }
+
+    .saved-card h3 {
+      margin: 0 0 4px;
+    }
+
+    .saved-meta {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .saved-edit {
+      display: grid;
+      grid-template-columns: 190px 1fr auto auto;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .empty {
+      color: var(--muted);
+      padding: 18px 0;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 820px) {
+      .auth-grid,
+      .saved-edit {
+        grid-template-columns: 1fr;
+      }
+
+      .account-head {
+        align-items: stretch;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <nav><a href="/">Back to happy hours</a></nav>
+      <h1>My Happy Hours</h1>
+      <p>Save favorites, keep notes, track places you want to try or have been to, and share your list with friends.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="auth-grid password-hidden" id="auth-section">
+      <div class="panel">
+        <h2>Sign in with Google</h2>
+        <div class="google-box">
+          <div id="google-signin"></div>
+          <p class="google-note" id="google-note">Loading Google sign-in...</p>
+        </div>
+      </div>
+
+      <div class="panel hidden" id="password-auth-panel">
+        <h2>Log in</h2>
+        <form id="login-form">
+          <label>Email <input name="email" type="email" autocomplete="email" required></label>
+          <label>Password <input name="password" type="password" autocomplete="current-password" required></label>
+          <button type="submit">Log in</button>
+          <div class="status" id="login-status" aria-live="polite"></div>
+        </form>
+      </div>
+
+      <div class="panel hidden" id="register-auth-panel">
+        <h2>Create account</h2>
+        <form id="register-form">
+          <label>Name <input name="name" autocomplete="name" required></label>
+          <label>Email <input name="email" type="email" autocomplete="email" required></label>
+          <label>Password <input name="password" type="password" autocomplete="new-password" minlength="8" required></label>
+          <button type="submit">Create account</button>
+          <div class="status" id="register-status" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+
+    <section class="panel hidden" id="account-section">
+      <div class="account-head">
+        <div>
+          <h2 id="account-title">Saved spots</h2>
+          <p id="account-subtitle"></p>
+        </div>
+        <div class="actions">
+          <a class="button secondary" id="share-link" href="#">Open shared list</a>
+          <button class="secondary" id="copy-share">Copy share link</button>
+          <button class="secondary" id="logout">Log out</button>
+        </div>
+      </div>
+      <div id="saved-grid" class="saved-grid"></div>
+    </section>
+  </main>
+
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    let currentUser = null;
+    let happyHours = [];
+
+    function escapeHTML(value) {
+      return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char]));
+    }
+
+    function statusLabel(status) {
+      return {
+        favorite: 'Favorite',
+        'want-to-try': 'Want to try',
+        'been-to': 'Been to'
+      }[status] || 'Favorite';
+    }
+
+    async function postJson(path, body) {
+      const res = await fetch(path, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error((json.errors || ['Request failed.']).join(' '));
+      return json;
+    }
+
+    async function loadHappyHours() {
+      const res = await fetch('/api/happy-hours');
+      happyHours = await res.json();
+    }
+
+    async function loadAccount() {
+      const res = await fetch('/api/account/me');
+      const session = await res.json();
+      currentUser = session.authenticated ? session.user : null;
+      render();
+    }
+
+    async function loadConfig() {
+      const res = await fetch('/api/config');
+      return res.json();
+    }
+
+    async function handleGoogleCredential(response) {
+      const note = document.getElementById('google-note');
+      note.classList.remove('error');
+      note.textContent = 'Signing in...';
+      try {
+        await postJson('/api/account/google', { credential: response.credential });
+        await loadAccount();
+        note.textContent = '';
+      } catch (err) {
+        note.classList.add('error');
+        note.textContent = err.message;
+      }
+    }
+
+    function showPasswordFallback(message) {
+      document.getElementById('auth-section').classList.remove('password-hidden');
+      document.getElementById('password-auth-panel').classList.remove('hidden');
+      document.getElementById('register-auth-panel').classList.remove('hidden');
+      document.getElementById('google-note').textContent = message;
+    }
+
+    async function initGoogleLogin() {
+      const config = await loadConfig();
+      if (!config.googleClientId) {
+        showPasswordFallback('Google login is not configured locally. Set GOOGLE_CLIENT_ID to enable it.');
+        return;
+      }
+
+      const start = Date.now();
+      while (!window.google?.accounts?.id && Date.now() - start < 5000) {
+        await new Promise(resolve => setTimeout(resolve, 50));
+      }
+
+      if (!window.google?.accounts?.id) {
+        showPasswordFallback('Google sign-in did not load. Email login is available for local testing.');
+        return;
+      }
+
+      google.accounts.id.initialize({
+        client_id: config.googleClientId,
+        callback: handleGoogleCredential
+      });
+      google.accounts.id.renderButton(document.getElementById('google-signin'), {
+        theme: 'outline',
+        size: 'large',
+        type: 'standard',
+        text: 'signin_with',
+        shape: 'pill'
+      });
+      document.getElementById('google-note').textContent = 'Use Google to save and share your happy hour list.';
+    }
+
+    function render() {
+      document.getElementById('auth-section').classList.toggle('hidden', Boolean(currentUser));
+      document.getElementById('account-section').classList.toggle('hidden', !currentUser);
+      if (!currentUser) return;
+
+      document.getElementById('account-title').textContent = `${currentUser.name}'s saved spots`;
+      document.getElementById('account-subtitle').textContent = `${currentUser.savedSpots.length} saved spot${currentUser.savedSpots.length === 1 ? '' : 's'}`;
+      const shareUrl = `${window.location.origin}/list.html?id=${encodeURIComponent(currentUser.shareId)}`;
+      document.getElementById('share-link').href = shareUrl;
+
+      const savedGrid = document.getElementById('saved-grid');
+      if (!currentUser.savedSpots.length) {
+        savedGrid.innerHTML = '<div class="empty">No saved spots yet. Head back to the homepage and save a few.</div>';
+        return;
+      }
+
+      savedGrid.innerHTML = currentUser.savedSpots.map(saved => {
+        const spot = happyHours.find(item => item.id === saved.spotId);
+        if (!spot) return '';
+        return `
+          <article class="saved-card" data-id="${saved.spotId}">
+            <div>
+              <h3>${escapeHTML(spot.name)}</h3>
+              <div class="saved-meta">${escapeHTML(spot.neighborhood)} · ${escapeHTML(spot.deals.slice(0, 2).join(' · '))}</div>
+            </div>
+            <div class="saved-edit">
+              <select data-field="status">
+                <option value="favorite" ${saved.status === 'favorite' ? 'selected' : ''}>Favorite</option>
+                <option value="want-to-try" ${saved.status === 'want-to-try' ? 'selected' : ''}>Want to try</option>
+                <option value="been-to" ${saved.status === 'been-to' ? 'selected' : ''}>Been to</option>
+              </select>
+              <textarea data-field="note" placeholder="Add a note for friends or future you...">${escapeHTML(saved.note)}</textarea>
+              <button data-action="save">Save</button>
+              <button class="secondary" data-action="remove">Remove</button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    async function handleAuth(form, path, statusId) {
+      const status = document.getElementById(statusId);
+      const button = form.querySelector('button');
+      const formData = new FormData(form);
+      status.classList.remove('error');
+      status.textContent = 'Working...';
+      button.disabled = true;
+      try {
+        await postJson(path, Object.fromEntries(formData.entries()));
+        form.reset();
+        await loadAccount();
+        status.textContent = '';
+      } catch (err) {
+        status.classList.add('error');
+        status.textContent = err.message;
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    document.getElementById('login-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      handleAuth(event.currentTarget, '/api/account/login', 'login-status');
+    });
+
+    document.getElementById('register-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      handleAuth(event.currentTarget, '/api/account/register', 'register-status');
+    });
+
+    document.getElementById('saved-grid').addEventListener('click', async (event) => {
+      const button = event.target.closest('button[data-action]');
+      if (!button) return;
+
+      const card = button.closest('.saved-card');
+      const spotId = card.dataset.id;
+      if (button.dataset.action === 'remove') {
+        await fetch(`/api/account/spots/${spotId}`, { method: 'DELETE' });
+      } else {
+        await fetch(`/api/account/spots/${spotId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            status: card.querySelector('[data-field="status"]').value,
+            note: card.querySelector('[data-field="note"]').value
+          })
+        });
+      }
+      await loadAccount();
+    });
+
+    document.getElementById('copy-share').addEventListener('click', async () => {
+      await navigator.clipboard.writeText(document.getElementById('share-link').href);
+      document.getElementById('account-subtitle').textContent = 'Share link copied.';
+    });
+
+    document.getElementById('logout').addEventListener('click', async () => {
+      await fetch('/api/account/logout', { method: 'POST' });
+      currentUser = null;
+      render();
+    });
+
+    Promise.all([loadHappyHours(), loadAccount(), initGoogleLogin()]);
+  </script>
+</body>
+</html>

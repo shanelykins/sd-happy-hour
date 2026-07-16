@@ -1,12 +1,17 @@
 {
   "name": "sd-happy-hours",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "validate:data": "node scripts/validate-data.js",
+    "test": "npm run validate:data"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "google-auth-library": "^10.9.0"
+  }
 }

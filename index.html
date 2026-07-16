@@ -89,6 +89,28 @@
       z-index: 1;
     }
 
+    .hero-account-link {
+      position: absolute;
+      top: 20px;
+      left: 24px;
+      z-index: 20;
+      color: white;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 100px;
+      backdrop-filter: blur(10px);
+      font-size: 0.875rem;
+      font-weight: 700;
+      padding: 10px 16px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .hero-account-link:hover {
+      background: rgba(0,0,0,0.38);
+      transform: translateY(-1px);
+    }
+
     .sun {
       position: absolute;
       bottom: 15%; left: 50%;
@@ -292,6 +314,26 @@
       gap: 10px;
       flex-wrap: wrap;
       align-items: center;
+    }
+
+    .search-input {
+      appearance: none;
+      background: white;
+      border: 2px solid var(--sand-warm);
+      color: var(--night);
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 10px 16px;
+      border-radius: 100px;
+      min-width: min(260px, 100%);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--sunset-start);
+      box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.12);
+      outline: none;
     }
 
     .filter-btn, .view-btn, .location-btn {
@@ -598,6 +640,110 @@
       color: var(--sunset-start);
     }
 
+    .trust-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 100px;
+      background: #ECFDF5;
+      color: #047857;
+    }
+
+    .trust-badge.unverified {
+      background: #FFF7ED;
+      color: #C2410C;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: -4px 0 14px;
+    }
+
+    .feature-tag {
+      background: var(--sand-warm);
+      color: var(--night-soft);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 5px 9px;
+      border-radius: 100px;
+      text-transform: capitalize;
+    }
+
+    .trust-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin: -4px 0 14px;
+      color: var(--night-soft);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .trust-row a {
+      color: var(--ocean);
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .trust-row a:hover {
+      text-decoration: underline;
+    }
+
+    .save-panel {
+      background: var(--sand-warm);
+      border-radius: var(--radius-sm);
+      display: grid;
+      gap: 8px;
+      margin: 0 0 14px;
+      padding: 10px;
+    }
+
+    .save-panel.compact {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .save-panel select,
+    .save-panel input {
+      border: 1px solid rgba(15, 23, 42, 0.12);
+      border-radius: 10px;
+      color: var(--night);
+      font: inherit;
+      font-size: 0.82rem;
+      padding: 8px 10px;
+      width: 100%;
+    }
+
+    .save-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .save-action {
+      border: 0;
+      border-radius: 100px;
+      background: var(--night);
+      color: white;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 8px 12px;
+    }
+
+    .save-action.secondary {
+      background: white;
+      color: var(--night);
+    }
+
     .week-row {
       display: flex;
       gap: 4px;
@@ -748,6 +894,14 @@
       text-decoration: underline;
     }
 
+    .admin-footer-link {
+      display: none;
+    }
+
+    .admin-footer-link.visible {
+      display: inline;
+    }
+
     .disclaimer {
       margin-top: 16px;
       font-size: 0.8rem;
@@ -761,6 +915,13 @@
         padding: 60px 20px 80px;
       }
 
+      .hero-account-link {
+        left: 16px;
+        top: 16px;
+        font-size: 0.8rem;
+        padding: 8px 12px;
+      }
+
       .filters-container {
         flex-direction: column;
         align-items: stretch;
@@ -768,6 +929,10 @@
 
       .filters {
         flex-wrap: wrap;
+      }
+
+      .search-input {
+        width: 100%;
       }
 
       .filter-btn {
@@ -793,6 +958,7 @@
       .live-counter .label {
         text-align: center;
       }
+
     }
   </style>
 </head>
@@ -800,6 +966,7 @@
 
   <!-- HERO -->
   <section class="hero">
+    <a class="hero-account-link" id="hero-account-link" href="/account.html">Log in</a>
     <div class="sun"></div>
     <div class="ocean"></div>
 
@@ -875,6 +1042,8 @@
   <section class="filters-section">
     <div class="filters-container">
       <div class="filters">
+        <input class="search-input" id="search-input" type="search" placeholder="Search oysters, rooftop, PB..." autocomplete="off">
+
         <select class="filter-btn" id="day-filter">
           <option value="">All days</option>
           <option value="Monday">Monday</option>
@@ -890,9 +1059,23 @@
           <option value="">All neighborhoods</option>
         </select>
 
+        <select class="filter-btn" id="deal-filter">
+          <option value="">All deals</option>
+        </select>
+
+        <select class="filter-btn" id="feature-filter">
+          <option value="">All vibes</option>
+        </select>
+
         <select class="filter-btn" id="status-filter">
           <option value="">All spots</option>
           <option value="now">Live now</option>
+        </select>
+
+        <select class="filter-btn" id="trust-filter">
+          <option value="">Any trust status</option>
+          <option value="verified">Verified only</option>
+          <option value="unverified">Needs verification</option>
         </select>
 
         <button class="location-btn" id="location-btn">
@@ -934,7 +1117,12 @@
 
   <!-- FOOTER -->
   <footer>
-    <p>Built by Shane & John in San Diego | <a href="mailto:hello@sdhappyhours.com">Submit a spot</a></p>
+    <p>
+      Built by Shane & John in San Diego |
+      <a href="/submit.html">Submit a spot</a>
+      <span> | <a href="/account.html" id="account-footer-link">Log in to save spots</a></span>
+      <span class="admin-footer-link" id="admin-footer-link"> | <a href="/admin.html">Admin review</a></span>
+    </p>
     <p class="disclaimer">Happy hour details are community-sourced. Always verify with the venue before visiting.</p>
   </footer>
 
@@ -946,6 +1134,7 @@
     let userLocation = null;
     let map = null;
     let markers = [];
+    let accountUser = null;
 
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const dayAbbrev = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
@@ -975,6 +1164,20 @@
       'Beach brewery': 'https://images.unsplash.com/photo-1559526324-593bc073d938?w=800&q=80',
       'default': 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800&q=80'
     };
+
+    function escapeHTML(value) {
+      return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char]));
+    }
+
+    function labelize(value) {
+      return value.replace(/\b\w/g, letter => letter.toUpperCase());
+    }
 
     document.getElementById('day-filter').value = today;
 
@@ -1102,11 +1305,11 @@
         const marker = L.marker([h.lat, h.lng], { icon })
           .bindPopup(`
             <div class="map-popup">
-              <h3>${h.name}</h3>
-              <div class="vibe">${h.vibe}</div>
+              <h3>${escapeHTML(h.name)}</h3>
+              <div class="vibe">${escapeHTML(h.vibe)} · ${h.verified ? 'Verified' : 'Needs verification'}</div>
               <div class="time">${formatTime(h.startTime)} – ${formatTime(h.endTime)}</div>
-              <div class="deals">${h.deals.slice(0, 2).join(' • ')}</div>
-              <a href="${h.website}" target="_blank">View website</a>
+              <div class="deals">${h.deals.slice(0, 2).map(escapeHTML).join(' • ')}</div>
+              <a href="${escapeHTML(h.website)}" target="_blank">View website</a>
             </div>
           `)
           .addTo(map);
@@ -1116,19 +1319,24 @@
     }
 
     async function loadData() {
-      const res = await fetch('/data/happy-hours.json');
+      const res = await fetch('/api/happy-hours');
       happyHours = await res.json();
 
-      const neighborhoods = [...new Set(happyHours.map(h => h.neighborhood))].sort();
-      const select = document.getElementById('neighborhood-filter');
-      neighborhoods.forEach(n => {
-        const opt = document.createElement('option');
-        opt.value = n;
-        opt.textContent = n;
-        select.appendChild(opt);
-      });
+      populateSelect('neighborhood-filter', [...new Set(happyHours.map(h => h.neighborhood))].sort());
+      populateSelect('deal-filter', [...new Set(happyHours.flatMap(h => h.dealTypes || []))].sort(), labelize);
+      populateSelect('feature-filter', [...new Set(happyHours.flatMap(h => h.features || []))].sort(), labelize);
 
       render();
+    }
+
+    function populateSelect(id, values, formatter = value => value) {
+      const select = document.getElementById(id);
+      values.forEach(n => {
+        const opt = document.createElement('option');
+        opt.value = n;
+        opt.textContent = formatter(n);
+        select.appendChild(opt);
+      });
     }
 
     function isHappeningNow(hh) {
@@ -1151,16 +1359,95 @@
       return vibeImages[vibe] || vibeImages['default'];
     }
 
+    function getTrustLabel(h) {
+      if (h.verified && h.lastVerifiedAt) {
+        return `Verified ${new Date(h.lastVerifiedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}`;
+      }
+      if (h.verified) return 'Verified';
+      return 'Needs verification';
+    }
+
+    function statusLabel(status) {
+      return {
+        favorite: 'Favorite',
+        'want-to-try': 'Want to try',
+        'been-to': 'Been to'
+      }[status] || 'Favorite';
+    }
+
+    function getSavedSpot(spotId) {
+      return accountUser?.savedSpots?.find(item => item.spotId === spotId);
+    }
+
+    function renderSavePanel(h) {
+      if (!accountUser) {
+        return `
+          <div class="save-panel compact">
+            <span>Save notes and lists</span>
+            <button class="save-action" data-save-login>Log in</button>
+          </div>
+        `;
+      }
+
+      const saved = getSavedSpot(h.id);
+      if (!saved) {
+        return `
+          <div class="save-panel compact">
+            <span>Add to your happy hour list</span>
+            <button class="save-action" data-save-spot="${h.id}">Save</button>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="save-panel" data-saved-spot="${h.id}">
+          <select data-save-status>
+            <option value="favorite" ${saved.status === 'favorite' ? 'selected' : ''}>Favorite</option>
+            <option value="want-to-try" ${saved.status === 'want-to-try' ? 'selected' : ''}>Want to try</option>
+            <option value="been-to" ${saved.status === 'been-to' ? 'selected' : ''}>Been to</option>
+          </select>
+          <input data-save-note value="${escapeHTML(saved.note)}" placeholder="Private note or shareable tip">
+          <div class="save-actions">
+            <button class="save-action" data-update-spot="${h.id}">Update</button>
+            <button class="save-action secondary" data-remove-spot="${h.id}">Remove</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function matchesSearch(h, query) {
+      if (!query) return true;
+      const haystack = [
+        h.name,
+        h.neighborhood,
+        h.address,
+        h.vibe,
+        ...(h.deals || []),
+        ...(h.dealTypes || []),
+        ...(h.features || [])
+      ].join(' ').toLowerCase();
+      return haystack.includes(query);
+    }
+
     function getFilteredData() {
+      const searchQuery = document.getElementById('search-input').value.trim().toLowerCase();
       const dayFilter = document.getElementById('day-filter').value;
       const neighborhoodFilter = document.getElementById('neighborhood-filter').value;
+      const dealFilter = document.getElementById('deal-filter').value;
+      const featureFilter = document.getElementById('feature-filter').value;
       const statusFilter = document.getElementById('status-filter').value;
+      const trustFilter = document.getElementById('trust-filter').value;
 
       let filtered = [...happyHours];
 
+      if (searchQuery) filtered = filtered.filter(h => matchesSearch(h, searchQuery));
       if (dayFilter) filtered = filtered.filter(h => h.days.includes(dayFilter));
       if (neighborhoodFilter) filtered = filtered.filter(h => h.neighborhood === neighborhoodFilter);
+      if (dealFilter) filtered = filtered.filter(h => (h.dealTypes || []).includes(dealFilter));
+      if (featureFilter) filtered = filtered.filter(h => (h.features || []).includes(featureFilter));
       if (statusFilter === 'now') filtered = filtered.filter(h => isHappeningNow(h));
+      if (trustFilter === 'verified') filtered = filtered.filter(h => h.verified);
+      if (trustFilter === 'unverified') filtered = filtered.filter(h => !h.verified);
 
       // Add distance if we have user location
       if (userLocation) {
@@ -1207,6 +1494,12 @@
         const isLive = isHappeningNow(h);
         const img = getImage(h.vibe);
         const hasDistance = h.distance !== undefined;
+        const trustClass = h.verified ? '' : ' unverified';
+        const sourceHref = h.sourceUrl || h.website;
+        const reportHref = `/submit.html`;
+        const featureTags = (h.features || []).slice(0, 3)
+          .map(tag => `<span class="feature-tag">${escapeHTML(labelize(tag))}</span>`)
+          .join('');
 
         const weekDots = dayNames.map((day, i) => {
           const active = h.days.includes(day);
@@ -1219,17 +1512,17 @@
 
         return `
           <article class="card ${isLive ? 'is-live' : ''}">
-            <a href="${h.website}" target="_blank" rel="noopener" style="text-decoration: none; color: inherit;">
+            <a href="${escapeHTML(h.website)}" target="_blank" rel="noopener" style="text-decoration: none; color: inherit;">
               <div class="card-image">
-                <img src="${img}" alt="${h.name}" loading="lazy">
+                <img src="${img}" alt="${escapeHTML(h.name)}" loading="lazy">
                 <div class="overlay"></div>
                 ${isLive ? '<div class="live-badge"><span class="dot"></span> Live Now</div>' : ''}
                 ${hasDistance
                   ? `<span class="distance-tag">${formatDistance(h.distance)}</span>`
-                  : `<span class="neighborhood-tag">${h.neighborhood}</span>`
+                  : `<span class="neighborhood-tag">${escapeHTML(h.neighborhood)}</span>`
                 }
                 <div class="time-overlay">
-                  <span class="venue-name">${h.name}</span>
+                  <span class="venue-name">${escapeHTML(h.name)}</span>
                   <span class="time-badge">${formatTime(h.startTime)} – ${formatTime(h.endTime)}</span>
                 </div>
               </div>
@@ -1237,16 +1530,26 @@
 
             <div class="card-body">
               <div class="card-meta">
-                <span class="card-vibe">${h.vibe}</span>
-                ${hasDistance ? `<span class="card-distance">${h.neighborhood}</span>` : ''}
+                <span class="card-vibe">${escapeHTML(h.vibe)}</span>
+                <span class="trust-badge${trustClass}">${getTrustLabel(h)}</span>
+                ${hasDistance ? `<span class="card-distance">${escapeHTML(h.neighborhood)}</span>` : ''}
               </div>
+
+              <div class="tag-row">${featureTags}</div>
+
+              <div class="trust-row">
+                <span>${h.verified ? 'Venue details checked' : 'Community-sourced listing'}</span>
+                <a href="${escapeHTML(reportHref)}">Report update</a>
+              </div>
+
+              ${renderSavePanel(h)}
 
               <div class="week-row">${weekDots}</div>
 
               <div class="card-deals">
                 <h3>Deals</h3>
                 <div class="deal-grid">
-                  ${h.deals.slice(0, 3).map(d => `<span class="deal">${d}</span>`).join('')}
+                  ${h.deals.slice(0, 3).map(d => `<span class="deal">${escapeHTML(d)}</span>`).join('')}
                 </div>
               </div>
 
@@ -1256,10 +1559,10 @@
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
                     <circle cx="12" cy="10" r="3"/>
                   </svg>
-                  <span>${h.address}</span>
+                  <span>${escapeHTML(h.address)}</span>
                 </a>
-                <a class="card-cta" href="${h.website}" target="_blank" rel="noopener">
-                  Website
+                <a class="card-cta" href="${escapeHTML(sourceHref)}" target="_blank" rel="noopener">
+                  Source
                   <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
                   </svg>
@@ -1276,11 +1579,61 @@
       }
     }
 
+    document.getElementById('search-input').addEventListener('input', render);
     document.getElementById('day-filter').addEventListener('change', render);
     document.getElementById('neighborhood-filter').addEventListener('change', render);
+    document.getElementById('deal-filter').addEventListener('change', render);
+    document.getElementById('feature-filter').addEventListener('change', render);
     document.getElementById('status-filter').addEventListener('change', render);
+    document.getElementById('trust-filter').addEventListener('change', render);
 
-    loadData();
+    document.getElementById('grid').addEventListener('click', async (event) => {
+      if (event.target.closest('[data-save-login]')) {
+        window.location.href = '/account.html';
+        return;
+      }
+
+      const saveButton = event.target.closest('[data-save-spot]');
+      const updateButton = event.target.closest('[data-update-spot]');
+      const removeButton = event.target.closest('[data-remove-spot]');
+      const spotId = saveButton?.dataset.saveSpot || updateButton?.dataset.updateSpot || removeButton?.dataset.removeSpot;
+      if (!spotId) return;
+
+      if (removeButton) {
+        await fetch(`/api/account/spots/${spotId}`, { method: 'DELETE' });
+      } else {
+        const panel = event.target.closest('.save-panel');
+        await fetch(`/api/account/spots/${spotId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            status: panel?.querySelector('[data-save-status]')?.value || 'favorite',
+            note: panel?.querySelector('[data-save-note]')?.value || ''
+          })
+        });
+      }
+      await loadAccount();
+    });
+
+    async function loadAccount() {
+      const res = await fetch('/api/account/me');
+      const session = await res.json();
+      accountUser = session.authenticated ? session.user : null;
+      document.getElementById('hero-account-link').textContent = accountUser ? 'My saved spots' : 'Log in';
+      document.getElementById('account-footer-link').textContent = accountUser ? 'My saved spots' : 'Log in to save spots';
+      render();
+    }
+
+    fetch('/api/admin/me')
+      .then(res => res.json())
+      .then(session => {
+        if (session.authenticated) {
+          document.getElementById('admin-footer-link').classList.add('visible');
+        }
+      })
+      .catch(() => {});
+
+    Promise.all([loadData(), loadAccount()]);
   </script>
 </body>
 </html>
